@@ -16,7 +16,7 @@ const styles = {
 		cursor: "pointer",
 	},
 	text: {
-		color: "#e84142",
+		color: "#e84042",
 	},
 };
 
