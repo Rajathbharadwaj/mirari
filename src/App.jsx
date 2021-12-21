@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 import Account from "components/Account";
-import { Grid, Stack, Typography } from "@mui/material";
+import { Autocomplete, Grid, Stack, Typography, TextField } from "@mui/material";
 import { createUseStyles } from "react-jss";
 import Logo from "./Logo.png";
 
@@ -27,6 +27,9 @@ const useStyles = createUseStyles({
 		background: "#2e2e2e",
 	},
 	headerItem: { paddingTop: "22px" },
+	searchBar: {
+		paddingTop: "8px",
+	},
 	content: {
 		display: "flex",
 		justifyContent: "center",
@@ -48,6 +51,45 @@ const App = () => {
 	const authErrorMessage = () => (
 		<Typography align="center">Please login using the "Connect Wallet" button</Typography>
 	);
+
+	const searchOptions = [
+		{
+			label: "Spell AMA with Daniele Siesta",
+			code: "ama",
+		},
+		{
+			label: "Connecting Avalanche to MetaMask",
+			code: "avax tutorial",
+		},
+		{
+			label: "Crabada Project Overview",
+			code: "crabada",
+		},
+		{
+			label: "1000X ALTCOINS",
+			code: "crypto influencer",
+		},
+		{
+			label: "Imperium Empires IGO Overview",
+			code: "imperium",
+		},
+		{
+			label: "Whales Just DUMPED",
+			code: "influencer lol",
+		},
+		{
+			label: "Infura Alternative",
+			code: "moralis tutorial",
+		},
+		{
+			label: "BIG NFT NEWS AND NEW HYPED PROJECTS!",
+			code: "nft",
+		},
+		{
+			label: "Ultra CEO INTERVIEW",
+			code: "ultra",
+		},
+	];
 
 	useEffect(() => {
 		if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
@@ -79,8 +121,33 @@ const App = () => {
 							</NavLink>
 						</Stack>
 					</Grid>
-					<Grid item xs={4} className={classes.headerItem}>
-						Search bar goes here
+					<Grid item xs={4} className={classes.searchBar}>
+						<Autocomplete
+							id="video-search"
+							sx={{
+								width: 300,
+								"& .MuiInputLabel-root": {
+									color: "#fff",
+								},
+								"& .MuiOutlinedInput-input": {
+									color: "#fff",
+								},
+								"& .MuiSvgIcon-root": {
+									color: "#fff",
+								},
+								"& .MuiInputLabel-root.Mui-focused": {
+									color: "#fff",
+								},
+								"& .MuiOutlinedInput-notchedOutline": {
+									borderColor: "#fff!important",
+								},
+							}}
+							disablePortal
+							options={searchOptions}
+							autoHighlight
+							renderInput={(params) => <TextField {...params} label="Search" />}
+							getOptionLabel={(option) => option.label}
+						/>
 					</Grid>
 					<Grid item xs={2} className={{ paddingTop: "6px" }}>
 						<Account />
