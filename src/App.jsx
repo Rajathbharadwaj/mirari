@@ -150,7 +150,7 @@ const App = () => {
 							getOptionLabel={(option) => option.label}
 						/>
 					</Grid>
-					<Grid item xs={2} className={{ paddingTop: "6px" }}>
+					<Grid item xs={2} style={{ paddingTop: "10px" }}>
 						<Account />
 					</Grid>
 				</Grid>
