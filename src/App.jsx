@@ -4,12 +4,11 @@ import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-do
 import Account from "components/Account";
 import { Autocomplete, Grid, Stack, Typography, TextField } from "@mui/material";
 import { createUseStyles } from "react-jss";
+import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Logo from "./Logo.png";
 
 const useStyles = createUseStyles({
 	root: {
-		height: "100vh",
-		background: "radial-gradient(100% 6959.67% at 0% 49.32%, #E84042 0%, #171717 89.79%)",
 		color: "#fff",
 		fontFamily: "Roboto, sans-serif",
 	},
@@ -35,6 +34,7 @@ const useStyles = createUseStyles({
 		justifyContent: "center",
 		color: "#c4c4c4",
 		paddingTop: "10%",
+		marginBottom: "5%",
 	},
 	link: {
 		textDecoration: "none",
@@ -144,6 +144,7 @@ const App = () => {
 							}}
 							disablePortal
 							options={searchOptions}
+							noOptionsText="No Results"
 							autoHighlight
 							renderInput={(params) => <TextField {...params} label="Search" />}
 							getOptionLabel={(option) => option.label}
@@ -153,12 +154,26 @@ const App = () => {
 						<Account />
 					</Grid>
 				</Grid>
-				<Grid container className={classes.content}>
+				<Grid
+					container
+					className={classes.content}
+					sx={{
+						height: "auto",
+					}}
+				>
 					<Switch>
-						<Route path="/">{!isAuthenticated && authErrorMessage()}</Route>
-						<Route path="/earnings">{!isAuthenticated && authErrorMessage()}</Route>
-						<Route path="/mychannel">{!isAuthenticated && authErrorMessage()}</Route>
-						<Route path="/swap">{!isAuthenticated && authErrorMessage()}</Route>
+						<Route exact path="/">
+							<VideoCardsList />
+						</Route>
+						<Route exact path="/earnings">
+							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
+						</Route>
+						<Route exact path="/mychannel">
+							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
+						</Route>
+						<Route exact path="/swap">
+							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
+						</Route>
 					</Switch>
 				</Grid>
 			</Grid>
