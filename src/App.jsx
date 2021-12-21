@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 import Account from "components/Account";
-import { Autocomplete, Grid, Stack, Typography, TextField } from "@mui/material";
+import { Autocomplete, Grid, Typography, TextField } from "@mui/material";
 import { createUseStyles } from "react-jss";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
-import Logo from "./Logo.png";
 import Sidebar from "containers/Sidebar/Sidebar";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Logo from "./Logo.png";
 
 const useStyles = createUseStyles({
 	root: {
@@ -26,8 +28,14 @@ const useStyles = createUseStyles({
 		position: "fixed",
 		paddingTop: "8px",
 		background: "#2e2e2e",
+		flexWrap: "nowrap",
+		justifyContent: "space-between",
 	},
 	headerItem: { paddingTop: "22px" },
+	nav: {
+		display: "flex",
+		justifyContent: "space-evenly",
+	},
 	searchBar: {
 		paddingTop: "8px",
 	},
@@ -41,6 +49,7 @@ const useStyles = createUseStyles({
 	},
 	link: {
 		textDecoration: "none",
+		fontSize: "14px",
 		color: "#fff",
 		"&:hover": {
 			color: "#E84042",
@@ -50,7 +59,8 @@ const useStyles = createUseStyles({
 const App = () => {
 	const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
 	const classes = useStyles();
-
+	const theme = useTheme();
+	const isXs = useMediaQuery(theme.breakpoints.only("xs"));
 	const authErrorMessage = () => (
 		<Typography align="center">Please login using the "Connect Wallet" button</Typography>
 	);
@@ -102,14 +112,21 @@ const App = () => {
 	return (
 		<Router>
 			<Grid container className={classes.root}>
-				<Grid container item alignItems="flex-start" className={classes.header}>
-					<Grid item xs={2}>
+				<Grid container alignItems="center" className={classes.header} spacing={1}>
+					<Grid
+						item
+						xs={1}
+						sx={{
+							minWidth: "150px",
+							maxWidth: "150px",
+						}}
+					>
 						<NavLink to="/" className={classes.logoLink}>
 							<img alt="Watch To Earn Logo" className={classes.logo} src={Logo} />
 						</NavLink>
 					</Grid>
 					<Grid item xs={4} className={classes.headerItem}>
-						<Stack direction="row" justifyContent="center" alignItems="flex-start" spacing={6}>
+						<nav className={classes.nav}>
 							<NavLink className={classes.link} to="/">
 								Home
 							</NavLink>
@@ -122,38 +139,55 @@ const App = () => {
 							<NavLink className={classes.link} to="/swap">
 								Swap
 							</NavLink>
-						</Stack>
+						</nav>
 					</Grid>
-					<Grid item xs={4} className={classes.searchBar}>
-						<Autocomplete
-							id="video-search"
-							sx={{
-								width: 300,
-								"& .MuiInputLabel-root": {
-									color: "#fff",
-								},
-								"& .MuiOutlinedInput-input": {
-									color: "#fff",
-								},
-								"& .MuiSvgIcon-root": {
-									color: "#fff",
-								},
-								"& .MuiInputLabel-root.Mui-focused": {
-									color: "#fff",
-								},
-								"& .MuiOutlinedInput-notchedOutline": {
-									borderColor: "#fff!important",
-								},
-							}}
-							disablePortal
-							options={searchOptions}
-							noOptionsText="No Results"
-							autoHighlight
-							renderInput={(params) => <TextField {...params} label="Search" />}
-							getOptionLabel={(option) => option.label}
-						/>
-					</Grid>
-					<Grid item xs={2} style={{ paddingTop: "10px" }}>
+					{!isXs && (
+						<Grid item sm={2} md={3} className={classes.searchBar}>
+							<Autocomplete
+								id="video-search"
+								sx={{
+									"& .MuiInputLabel-root": {
+										color: "#fff",
+										fontSize: "14px",
+									},
+									"& .MuiOutlinedInput-input": {
+										color: "#fff",
+										fontSize: "14px",
+									},
+									"& .MuiSvgIcon-root": {
+										color: "#fff",
+									},
+									"& .MuiInputLabel-root.Mui-focused": {
+										color: "#fff",
+									},
+									"& .MuiOutlinedInput-notchedOutline": {
+										borderColor: "#fff!important",
+									},
+								}}
+								disablePortal
+								options={searchOptions}
+								noOptionsText="No Results"
+								autoHighlight
+								renderInput={(params) => <TextField {...params} label="Search" />}
+								getOptionLabel={(option) => option.label}
+							/>
+						</Grid>
+					)}
+					<Grid
+						item
+						xs={4}
+						sm={2}
+						md="auto"
+						style={{
+							paddingTop: "10px",
+							paddingRight: "30px",
+							width: {
+								xs: 250,
+								sm: 400,
+								md: "100%",
+							},
+						}}
+					>
 						<Account />
 					</Grid>
 				</Grid>
