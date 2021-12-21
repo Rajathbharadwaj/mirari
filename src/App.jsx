@@ -6,6 +6,7 @@ import { Autocomplete, Grid, Stack, Typography, TextField } from "@mui/material"
 import { createUseStyles } from "react-jss";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Logo from "./Logo.png";
+import Sidebar from "containers/Sidebar/Sidebar";
 
 const useStyles = createUseStyles({
 	root: {
@@ -19,6 +20,7 @@ const useStyles = createUseStyles({
 	logo: {
 		height: "80px",
 		width: "120px",
+		paddingLeft: "14px",
 	},
 	header: {
 		position: "fixed",
@@ -33,8 +35,9 @@ const useStyles = createUseStyles({
 		display: "flex",
 		justifyContent: "center",
 		color: "#c4c4c4",
-		paddingTop: "10%",
-		marginBottom: "5%",
+		paddingTop: "100px",
+		marginLeft: "150px",
+		marginBottom: "50px",
 	},
 	link: {
 		textDecoration: "none",
@@ -154,6 +157,7 @@ const App = () => {
 						<Account />
 					</Grid>
 				</Grid>
+				<Sidebar />
 				<Grid
 					container
 					className={classes.content}
