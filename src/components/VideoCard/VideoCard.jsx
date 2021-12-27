@@ -14,9 +14,11 @@ const VideoCard = (props) => {
 			}}
 		>
 			<CardMedia component="img" image={imgSrc} alt={altTag} />
-			<CardContent>
-				<Typography>{content}</Typography>
-			</CardContent>
+			{content && (
+				<CardContent>
+					<Typography>{content}</Typography>
+				</CardContent>
+			)}
 		</Card>
 	);
 };

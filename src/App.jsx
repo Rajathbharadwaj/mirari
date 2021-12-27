@@ -4,10 +4,12 @@ import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-do
 import Account from "components/Account";
 import { Autocomplete, Grid, Typography, TextField } from "@mui/material";
 import { createUseStyles } from "react-jss";
+import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Sidebar from "containers/Sidebar/Sidebar";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MyChannel from "containers/MyChannel/MyChannel";
 import Logo from "./Logo.png";
 
 const useStyles = createUseStyles({
@@ -58,6 +60,7 @@ const useStyles = createUseStyles({
 });
 const App = () => {
 	const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
+	const { walletAddress } = useMoralisDapp();
 	const classes = useStyles();
 	const theme = useTheme();
 	const isXs = useMediaQuery(theme.breakpoints.only("xs"));
@@ -207,7 +210,11 @@ const App = () => {
 							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
 						</Route>
 						<Route exact path="/mychannel">
-							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
+							{!isAuthenticated ? (
+								authErrorMessage()
+							) : (
+								<MyChannel currentWallet address={walletAddress} />
+							)}
 						</Route>
 						<Route exact path="/swap">
 							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
