@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Blank from "../../video-thumbnails/blank.png";
+import CreateTokenModal from "containers/CreateTokenModal/CreateTokenModal";
 
 const MyChannel = (props) => {
 	const { address } = props;
+	const [open, setOpen] = useState(false);
+
 	const channelVideos = [
 		{
 			imgSrc: Blank,
@@ -110,6 +113,7 @@ const MyChannel = (props) => {
 							background: "#e84142",
 							color: "#fff",
 						}}
+						onClick={() => setOpen(true)}
 					>
 						Create Token
 					</Button>
@@ -121,6 +125,7 @@ const MyChannel = (props) => {
 			<Grid item sx={{ marginTop: "24px" }}>
 				<VideoCardsList videoData={channelVideos} />
 			</Grid>
+			<CreateTokenModal open={open} handleClose={() => setOpen(false)} />
 		</Grid>
 	);
 };

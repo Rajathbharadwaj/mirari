@@ -78,8 +78,8 @@ const VideoCardsList = (props) => {
 			alignItems="baseline"
 			columns={{ xs: 4, sm: 8, md: 12 }}
 		>
-			{videos.map((video) => (
-				<Grid item key={video.imgSrc}>
+			{videos.map((video, index) => (
+				<Grid item key={index}>
 					<VideoCard
 						imgSrc={video.imgSrc}
 						altTag={video.altTag}
