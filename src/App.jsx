@@ -32,6 +32,7 @@ const useStyles = createUseStyles({
 		background: "#2e2e2e",
 		flexWrap: "nowrap",
 		justifyContent: "space-between",
+		zIndex: 8,
 	},
 	headerItem: { paddingTop: "22px" },
 	nav: {
