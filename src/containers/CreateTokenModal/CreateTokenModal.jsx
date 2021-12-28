@@ -12,7 +12,7 @@ const CreateTokenModal = (props) => {
 		top: "50%",
 		left: "50%",
 		transform: "translate(-50%, -50%)",
-		height: "70vh",
+		height: "60vh",
 		width: "36vw",
 		maxWidth: "600px",
 		backgroundColor: "#2e2e2e",
