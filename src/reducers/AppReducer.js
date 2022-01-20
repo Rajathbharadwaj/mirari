@@ -1,4 +1,4 @@
-import { SET_SELECTED_CREATOR } from "../actions/AppActions";
+import { SET_SELECTED_CREATOR, SET_WALLET_ADDRESS } from "../actions/AppActions";
 import AvalancheOfficial from "../avatars/avalanche.jpeg";
 import Avalaunch from "../avatars/avalaunch.jpeg";
 import AlexBecker from "../avatars/becker.jpeg";
@@ -85,6 +85,11 @@ const appReducer = (state = initialState, action) => {
 			return {
 				...state,
 				selectedCreator: payload,
+			};
+		case SET_WALLET_ADDRESS:
+			return {
+				...state,
+				currentWallet: payload,
 			};
 		default:
 			return state;

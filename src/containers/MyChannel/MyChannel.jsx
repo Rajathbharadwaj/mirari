@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Blank from "../../video-thumbnails/blank.png";
 import CreateTokenModal from "containers/CreateTokenModal/CreateTokenModal";
 
-const MyChannel = (props) => {
-	const { address } = props;
+const MyChannel = ({ currentWallet }) => {
 	const [open, setOpen] = useState(false);
 
 	const channelVideos = [
@@ -96,7 +96,7 @@ const MyChannel = (props) => {
 							}}
 						/>
 						<Typography>
-							{address.slice(0, 6)}...{address.slice(36)}
+							{currentWallet.slice(0, 6)}...{currentWallet.slice(36)}
 						</Typography>
 					</Box>
 				</Grid>
@@ -130,4 +130,8 @@ const MyChannel = (props) => {
 	);
 };
 
-export default MyChannel;
+const mapStateToProps = (state) => ({
+	currentWallet: state.currentWallet,
+});
+
+export default connect(mapStateToProps, null)(MyChannel);

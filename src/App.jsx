@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
+import { connect } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 import Account from "components/Account";
 import { Autocomplete, Grid, Typography, TextField } from "@mui/material";
@@ -10,6 +11,7 @@ import Sidebar from "containers/Sidebar/Sidebar";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MyChannel from "containers/MyChannel/MyChannel";
+import { setWalletAddress } from "./actions/AppActions";
 import Logo from "./Logo.png";
 import CreatorChannel from "containers/CreatorChannel/CreatorChannel";
 
@@ -60,7 +62,7 @@ const useStyles = createUseStyles({
 		},
 	},
 });
-const App = () => {
+const App = ({ setWalletAddress }) => {
 	const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
 	const { walletAddress } = useMoralisDapp();
 	const classes = useStyles();
@@ -110,9 +112,15 @@ const App = () => {
 	];
 
 	useEffect(() => {
-		if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+		if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
+			enableWeb3();
+			setWalletAddress(walletAddress);
+		}
+		if (!isAuthenticated) {
+			setWalletAddress(null);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isAuthenticated, isWeb3Enabled]);
+	}, [isAuthenticated, isWeb3Enabled, walletAddress]);
 
 	return (
 		<Router>
@@ -232,4 +240,8 @@ const App = () => {
 	);
 };
 
-export default App;
+const mapDispatchToProps = {
+	setWalletAddress,
+};
+
+export default connect(null, mapDispatchToProps)(App);
