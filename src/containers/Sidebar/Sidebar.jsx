@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import {
 	Box,
 	Divider,
@@ -10,58 +11,23 @@ import {
 	Avatar,
 	ListItemIcon,
 } from "@mui/material";
-import AvalancheOfficial from "../../avatars/avalanche.jpeg";
-import Avalaunch from "../../avatars/avalaunch.jpeg";
-import AlexBecker from "../../avatars/becker.jpeg";
-import CryptoCred from "../../avatars/cred.jpeg";
-import TheDefiant from "../../avatars/defiant.jpeg";
-import FrogRadio from "../../avatars/frog-radio.jpeg";
-import MKBHD from "../../avatars/mkbhd.jpeg";
-import MoralisWeb3 from "../../avatars/moralis.jpeg";
+import { NavLink } from "react-router-dom";
+import { createUseStyles } from "react-jss";
+import { setSelectedCreator } from "../../actions/AppActions";
 
-const Sidebar = () => {
-	const channelsList = [
-		{
-			img: MoralisWeb3,
-			name: "Moralis Web 3",
-			live: true,
+const useStyles = createUseStyles({
+	link: {
+		textDecoration: "none",
+		fontSize: "14px",
+		color: "#fff",
+		"&:hover": {
+			color: "inherit",
 		},
-		{
-			img: AvalancheOfficial,
-			name: "Avalanche",
-			live: false,
-		},
-		{
-			img: MKBHD,
-			name: "Marques Brownlee",
-			live: true,
-		},
-		{
-			img: Avalaunch,
-			name: "Avalaunch",
-			live: false,
-		},
-		{
-			img: AlexBecker,
-			name: "Alex Becker",
-			live: true,
-		},
-		{
-			img: FrogRadio,
-			name: "Frog Radio",
-			live: false,
-		},
-		{
-			img: CryptoCred,
-			name: "Crypto Cred",
-			live: true,
-		},
-		{
-			img: TheDefiant,
-			name: "The Defiant",
-			live: false,
-		},
-	];
+	},
+});
+
+const Sidebar = ({ channelsList, setSelectedCreator }) => {
+	const styles = useStyles();
 
 	return (
 		<Box
@@ -83,47 +49,67 @@ const Sidebar = () => {
 			</Typography>
 			<List>
 				{channelsList.map((channel) => (
-					<ListItem
-						key={channel.img}
-						sx={{
-							":hover": {
-								cursor: "pointer",
-								border: "1px solid #c4c4c4",
-								borderRadius: "8%",
-								backdropFilter: "brightness(0.1)",
-							},
-						}}
-					>
-						<ListItemAvatar>
-							<Avatar src={channel.img} />
-						</ListItemAvatar>
-						<ListItemText
+					<NavLink className={styles.link} to={`/creator/${channel.name}`}>
+						<ListItem
+							key={channel.img}
 							sx={{
-								"& .MuiTypography-root": { fontSize: "12px" },
+								":hover": {
+									cursor: "pointer",
+									border: "1px solid #c4c4c4",
+									borderRadius: "8%",
+									backdropFilter: "brightness(0.1)",
+								},
 							}}
-							primary={channel.name}
-						/>
-						{channel.live && (
-							<ListItemIcon>
-								<div
-									style={{
-										position: "absolute",
-										top: "42%",
-										left: "84%",
-										display: "block",
-										width: "8px",
-										height: "8px",
-										borderRadius: "50%",
-										background: "#E84042",
-									}}
-								></div>
-							</ListItemIcon>
-						)}
-					</ListItem>
+							onClick={() => {
+								setSelectedCreator({
+									creatorName: channel.name,
+									avatarSrc: channel.img,
+									lpToken: {
+										tokenName: channel.tokenName,
+										tokenAddress: channel.tokenAddress,
+									},
+								});
+							}}
+						>
+							<ListItemAvatar>
+								<Avatar src={channel.img} />
+							</ListItemAvatar>
+							<ListItemText
+								sx={{
+									"& .MuiTypography-root": { fontSize: "12px" },
+								}}
+								primary={channel.name}
+							/>
+							{channel.live && (
+								<ListItemIcon>
+									<div
+										style={{
+											position: "absolute",
+											top: "42%",
+											left: "84%",
+											display: "block",
+											width: "8px",
+											height: "8px",
+											borderRadius: "50%",
+											background: "#E84042",
+										}}
+									></div>
+								</ListItemIcon>
+							)}
+						</ListItem>
+					</NavLink>
 				))}
 			</List>
 		</Box>
 	);
 };
 
-export default Sidebar;
+const mapStateToProps = (state) => ({
+	channelsList: state.channelsList,
+});
+
+const mapDispatchToProps = {
+	setSelectedCreator,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

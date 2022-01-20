@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MyChannel from "containers/MyChannel/MyChannel";
 import Logo from "./Logo.png";
+import CreatorChannel from "containers/CreatorChannel/CreatorChannel";
 
 const useStyles = createUseStyles({
 	root: {
@@ -220,6 +221,10 @@ const App = () => {
 						<Route exact path="/swap">
 							{!isAuthenticated ? authErrorMessage() : <>Coming soon</>}
 						</Route>
+						<Route
+							path="/creator/:creatorName"
+							children={<CreatorChannel address={walletAddress} />}
+						></Route>
 					</Switch>
 				</Grid>
 			</Grid>
