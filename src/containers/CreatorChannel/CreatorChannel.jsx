@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
+import Approval from "../../components/Approval/Approval";
 import Blank from "../../video-thumbnails/blank.png";
-import { connect } from "react-redux";
 
 const CreatorChannel = ({ selectedCreator }) => {
 	const { creatorName, lpToken, avatarSrc } = selectedCreator;
@@ -109,8 +110,9 @@ const CreatorChannel = ({ selectedCreator }) => {
 			<Grid item xs={12} sx={{ marginTop: "24px" }}>
 				<Divider variant="fullWidth" sx={{ borderColor: "#c4c4c4" }} />
 			</Grid>
-			<Grid item sx={{ marginTop: "24px" }}>
-				<VideoCardsList videoData={channelVideos} />
+			<Grid item xs={12} sx={{ marginTop: "24px" }}>
+				<Approval />
+				{/* <VideoCardsList videoData={channelVideos} /> */}
 			</Grid>
 		</Grid>
 	);
