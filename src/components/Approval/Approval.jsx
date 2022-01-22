@@ -128,6 +128,7 @@ const Approval = ({ currentWallet }) => {
 			>
 				<CardContent>
 					<Box>
+						<Typography variant="h4">DEPOSIT</Typography>
 						<div style={{ display: "flex", flexDirection: "column" }}>
 							{!isApproved && (
 								<Button

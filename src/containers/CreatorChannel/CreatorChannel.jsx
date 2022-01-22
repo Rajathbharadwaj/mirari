@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Approval from "../../components/Approval/Approval";
+import Withdraw from "../../components/Withdraw/Withdraw";
 import Blank from "../../video-thumbnails/blank.png";
 
 const CreatorChannel = ({ selectedCreator }) => {
@@ -112,6 +113,7 @@ const CreatorChannel = ({ selectedCreator }) => {
 			</Grid>
 			<Grid item xs={12} sx={{ marginTop: "24px" }}>
 				<Approval />
+				<Withdraw />
 				{/* <VideoCardsList videoData={channelVideos} /> */}
 			</Grid>
 		</Grid>
