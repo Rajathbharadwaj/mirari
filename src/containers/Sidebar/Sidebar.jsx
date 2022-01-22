@@ -49,7 +49,7 @@ const Sidebar = ({ channelsList, setSelectedCreator }) => {
 			</Typography>
 			<List>
 				{channelsList.map((channel) => (
-					<NavLink className={styles.link} to={`/creator/${channel.name}`}>
+					<NavLink key={channel.name} className={styles.link} to={`/creator/${channel.name}`}>
 						<ListItem
 							key={channel.img}
 							sx={{
