@@ -27,7 +27,7 @@ const Withdraw = ({ currentWallet }) => {
 	const [wval, setWval] = useState(0);
 	const [reward, setReward] = useState(0);
 	const [open, setOpen] = useState(false);
-	const [alertType, setAlertType] = useState("");
+	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
 	const pid = config.fuji.pid;
