@@ -22,7 +22,7 @@ const Approval = ({ currentWallet }) => {
 	const [isApproved, setIsApproved] = useState(false);
 	const [dval, setDval] = useState(0);
 	const [open, setOpen] = useState(false);
-	const [alertType, setAlertType] = useState("");
+	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
 

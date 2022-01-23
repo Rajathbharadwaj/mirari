@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
-import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
+import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
+// import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Approval from "../../components/Approval/Approval";
 import Withdraw from "../../components/Withdraw/Withdraw";
 import Account from "../../components/Account";
+import { setSelectedCreator } from "../../actions/AppActions";
 import Blank from "../../video-thumbnails/blank.png";
 
-const CreatorChannel = ({ selectedCreator, currentWallet }) => {
+const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
+	const location = useLocation();
 	const { creatorName, lpToken, avatarSrc } = selectedCreator;
 	const { tokenName, tokenAddress } = lpToken;
 
@@ -73,6 +76,27 @@ const CreatorChannel = ({ selectedCreator, currentWallet }) => {
 			content: "",
 		},
 	];
+
+	// update selectedCreator on navigation
+	useEffect(() => {
+		if (location.pathname.split("/")[2]) {
+			const creatorFromUrl = decodeURI(location.pathname.split("/")[2]);
+			if (creatorFromUrl && creatorName !== creatorFromUrl) {
+				const channelObj = channelsList.filter((item) => item.name === creatorFromUrl)[0];
+				if (channelObj) {
+					setSelectedCreator({
+						creatorName: channelObj.name,
+						avatarSrc: channelObj.img,
+						lpToken: {
+							tokenName: channelObj.tokenName,
+							tokenAddress: channelObj.tokenAddress,
+						},
+					});
+				}
+			}
+		}
+	}, [location, creatorName, channelsList]);
+
 	return (
 		<Grid
 			container
@@ -140,8 +164,11 @@ const CreatorChannel = ({ selectedCreator, currentWallet }) => {
 const mapStateToProps = (state) => ({
 	selectedCreator: state.selectedCreator,
 	currentWallet: state.currentWallet,
+	channelsList: state.channelsList,
 });
 
-const mapDispatchToProps = null;
+const mapDispatchToProps = {
+	setSelectedCreator,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatorChannel);
