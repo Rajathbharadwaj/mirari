@@ -54,14 +54,14 @@ const Approval = ({ currentWallet }) => {
 			if (err) {
 				setAlertType("error");
 				setAlertMessage("Deposit Transaction failed!");
-				setAlertDetails(`📃 Tx Hash: ${err}`);
+				setAlertDetails(`📃 Tx Hash: ${err.toString()}`);
 				setOpen(true);
 				console.log("An error occured", err);
 				return;
 			} else {
 				setAlertType("info");
 				setAlertMessage("🔊 New Transaction");
-				setAlertDetails(`📃 Tx Hash: ${res}`);
+				setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 				setOpen(true);
 				console.log("Hash of the transaction: " + res);
 			}
@@ -76,14 +76,14 @@ const Approval = ({ currentWallet }) => {
 				if (err) {
 					setAlertType("error");
 					setAlertMessage("Approval failed!");
-					setAlertDetails(`📃 Tx Hash: ${err}`);
+					setAlertDetails(`📃 Tx Hash: ${err.toString()}`);
 					setOpen(true);
 					console.log("An error occured", err);
 					return;
 				} else {
 					setAlertType("info");
 					setAlertMessage("🔊 New Transaction");
-					setAlertDetails(`📃 Tx Hash: ${res}`);
+					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 					setOpen(true);
 					console.log("Hash of the transaction: " + res);
 				}
@@ -157,7 +157,7 @@ const Approval = ({ currentWallet }) => {
 										InputProps={{
 											endAdornment: (
 												<Button
-													variant="contained"
+													variant="text"
 													sx={{ width: "100%" }}
 													onClick={() => setDval(balance)}
 													align="center"

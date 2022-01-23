@@ -47,14 +47,14 @@ const Withdraw = ({ currentWallet }) => {
 			if (err) {
 				setAlertType("error");
 				setAlertMessage("Approval failed!");
-				setAlertDetails(`📃 Tx Hash: ${err}`);
+				setAlertDetails(`📃 Tx Hash: ${err.toString()}`);
 				setOpen(true);
 				console.log("An error occured", err);
 				return;
 			} else {
 				setAlertType("info");
 				setAlertMessage("🔊 New Transaction");
-				setAlertDetails(`📃 Tx Hash: ${res}`);
+				setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 				setOpen(true);
 				console.log("Hash of the transaction: " + res);
 			}
@@ -67,14 +67,14 @@ const Withdraw = ({ currentWallet }) => {
 			if (err) {
 				setAlertType("error");
 				setAlertMessage("Approval failed!");
-				setAlertDetails(`📃 Tx Hash: ${err}`);
+				setAlertDetails(`📃 Tx Hash: ${err.toString()}`);
 				setOpen(true);
 				console.log("An error occured", err);
 				return;
 			} else {
 				setAlertType("info");
 				setAlertMessage("🔊 New Transaction");
-				setAlertDetails(`📃 Tx Hash: ${res}`);
+				setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 				setOpen(true);
 				console.log("Hash of the transaction: " + res);
 			}
@@ -90,7 +90,7 @@ const Withdraw = ({ currentWallet }) => {
 				return;
 			}
 			console.log("Staked: ", res);
-			if (res.amount != 0) {
+			if (res.amount !== 0) {
 				setParticipate(true);
 				setBalance(res.amount / config.decimals);
 			} else {

@@ -4,9 +4,10 @@ import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Approval from "../../components/Approval/Approval";
 import Withdraw from "../../components/Withdraw/Withdraw";
+import Account from "../../components/Account";
 import Blank from "../../video-thumbnails/blank.png";
 
-const CreatorChannel = ({ selectedCreator }) => {
+const CreatorChannel = ({ selectedCreator, currentWallet }) => {
 	const { creatorName, lpToken, avatarSrc } = selectedCreator;
 	const { tokenName, tokenAddress } = lpToken;
 
@@ -111,17 +112,34 @@ const CreatorChannel = ({ selectedCreator }) => {
 			<Grid item xs={12} sx={{ marginTop: "24px" }}>
 				<Divider variant="fullWidth" sx={{ borderColor: "#c4c4c4" }} />
 			</Grid>
-			<Grid item xs={12} sx={{ marginTop: "24px" }}>
-				<Approval />
-				<Withdraw />
-				{/* <VideoCardsList videoData={channelVideos} /> */}
-			</Grid>
+			{currentWallet !== null && (
+				<Grid item xs={12} sx={{ marginTop: "24px" }}>
+					<Approval />
+					<Withdraw />
+					{/* <VideoCardsList videoData={channelVideos} /> */}
+				</Grid>
+			)}
+			{currentWallet === null && (
+				<Grid
+					item
+					xs={12}
+					sx={{
+						display: "flex",
+						marginTop: "120px",
+						alignItems: "center",
+						justifyContent: "center",
+					}}
+				>
+					<Account />
+				</Grid>
+			)}
 		</Grid>
 	);
 };
 
 const mapStateToProps = (state) => ({
 	selectedCreator: state.selectedCreator,
+	currentWallet: state.currentWallet,
 });
 
 const mapDispatchToProps = null;
