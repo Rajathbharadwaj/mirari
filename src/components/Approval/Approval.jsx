@@ -17,6 +17,8 @@ import config from "../../contracts/config";
 
 const Approval = ({ currentWallet }) => {
 	const web3 = new Web3(window.web3.currentProvider);
+	const backgroundColor = "#e84042";
+	const color = "#fff";
 
 	const [balance, setBalance] = useState(0);
 	const [isApproved, setIsApproved] = useState(false);
@@ -122,13 +124,19 @@ const Approval = ({ currentWallet }) => {
 		<Box sx={{ alignItems: "center", display: "flex", justifyContent: "center" }}>
 			<Card
 				sx={{
-					width: "450px",
+					width: "52%",
 					marginTop: "32px",
+					height: "300px",
+					borderRadius: "16px",
+					color: color,
+					backgroundColor: backgroundColor,
 				}}
 			>
 				<CardContent>
 					<Box>
-						<Typography variant="h4">DEPOSIT</Typography>
+						<Typography marginBottom="16px" textAlign="center" variant="h4">
+							DEPOSIT LP
+						</Typography>
 						<div style={{ display: "flex", flexDirection: "column" }}>
 							{!isApproved && (
 								<Button

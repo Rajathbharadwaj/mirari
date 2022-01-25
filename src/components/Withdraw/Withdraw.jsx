@@ -16,6 +16,8 @@ import config from "../../contracts/config";
 
 const Withdraw = ({ currentWallet }) => {
 	const web3 = new Web3(window.web3.currentProvider);
+	const backgroundColor = "#e84042";
+	const color = "#fff";
 
 	//MasterChef
 	const Masterabi = MasterInfo.abi;
@@ -115,13 +117,19 @@ const Withdraw = ({ currentWallet }) => {
 		<Box sx={{ alignItems: "center", display: "flex", justifyContent: "center" }}>
 			<Card
 				sx={{
-					width: "450px",
+					width: "52%",
 					marginTop: "32px",
+					height: "300px",
+					borderRadius: "16px",
+					color: color,
+					backgroundColor: backgroundColor,
 				}}
 			>
 				<CardContent>
 					<Box>
-						<Typography variant="h4">WITHDRAW/HARVEST</Typography>
+						<Typography marginBottom="16px" textAlign="center" variant="h4">
+							HARVEST/WITHDRAW LP
+						</Typography>
 						<Button sx={{ marginBottom: "10px" }} variant="contained" onClick={() => Participate()}>
 							Check Your Partcipation
 						</Button>

@@ -35,6 +35,7 @@ function a11yProps(index) {
 }
 
 const FullWidthTabs = ({ tabs }) => {
+	const backgroundColor = "#2e2e2e";
 	const theme = useTheme();
 	const [value, setValue] = useState(0);
 
@@ -47,8 +48,8 @@ const FullWidthTabs = ({ tabs }) => {
 	};
 
 	return (
-		<Box sx={{ bgcolor: "background.paper", width: "100%" }}>
-			<AppBar position="static">
+		<Box sx={{ bgcolor: backgroundColor, width: "100%" }}>
+			<AppBar position="static" sx={{ backgroundColor: backgroundColor }}>
 				<Tabs
 					value={value}
 					onChange={handleChange}

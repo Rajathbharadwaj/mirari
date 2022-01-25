@@ -16,11 +16,11 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 	const { tokenName, tokenAddress } = lpToken;
 	const tabs = [
 		{
-			label: "Approve and Deposit Funds",
+			label: "Deposit LP Tokens",
 			content: <Approval />,
 		},
 		{
-			label: "Harvest and Withdraw Funds",
+			label: "Harvest/Withdraw LP Tokens",
 			content: <Withdraw />,
 		},
 	];
