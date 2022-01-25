@@ -8,11 +8,22 @@ import Withdraw from "../../components/Withdraw/Withdraw";
 import Account from "../../components/Account";
 import { setSelectedCreator } from "../../actions/AppActions";
 import Blank from "../../video-thumbnails/blank.png";
+import FullWidthTabs from "../../components/FullWidthTabs/FullWidthTabs";
 
 const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 	const location = useLocation();
 	const { creatorName, lpToken, avatarSrc } = selectedCreator;
 	const { tokenName, tokenAddress } = lpToken;
+	const tabs = [
+		{
+			label: "Approve and Deposit Funds",
+			content: <Approval />,
+		},
+		{
+			label: "Harvest and Withdraw Funds",
+			content: <Withdraw />,
+		},
+	];
 
 	const channelVideos = [
 		{
@@ -138,8 +149,7 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 			</Grid>
 			{currentWallet !== null && (
 				<Grid item xs={12} sx={{ marginTop: "24px" }}>
-					<Approval />
-					<Withdraw />
+					<FullWidthTabs tabs={tabs} />
 					{/* <VideoCardsList videoData={channelVideos} /> */}
 				</Grid>
 			)}
