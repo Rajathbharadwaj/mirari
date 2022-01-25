@@ -173,7 +173,12 @@ const Withdraw = ({ currentWallet }) => {
 				</CardContent>
 			</Card>
 
-			<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+			<Snackbar
+				open={open}
+				anchorOrigin={{ vertical: "top", horizontal: "center" }}
+				autoHideDuration={6000}
+				onClose={handleClose}
+			>
 				<Alert onClose={handleClose} severity={alertType} sx={{ width: "100%" }}>
 					<Typography>{alertMessage}</Typography>
 					<Typography>{alertDetails}</Typography>

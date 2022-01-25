@@ -19,6 +19,7 @@ const config = {
 		networks: 43113,
 		pid: 0,
 	},
+	// need supportedPools array with token deployed and lp deployed
 	avax: {
 		MasterChef: "",
 		Router: "",

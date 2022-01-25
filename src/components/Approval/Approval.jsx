@@ -183,7 +183,12 @@ const Approval = ({ currentWallet }) => {
 					</Box>
 				</CardContent>
 			</Card>
-			<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+			<Snackbar
+				anchorOrigin={{ vertical: "top", horizontal: "center" }}
+				open={open}
+				autoHideDuration={6000}
+				onClose={handleClose}
+			>
 				<Alert onClose={handleClose} severity={alertType} sx={{ width: "100%" }}>
 					<Typography>{alertMessage}</Typography>
 					<Typography>{alertDetails}</Typography>
