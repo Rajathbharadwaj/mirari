@@ -37,7 +37,7 @@ const Approval = ({ currentWallet }) => {
 	};
 
 	let approveValue = web3.utils.toWei("100000000000000000");
-	//Pair
+	//this is liqudity pool address, no jlp's address
 	const LPabi = LPInfo.abi;
 	const LPAddress = config.fuji.JLP;
 	const LPContract = new web3.eth.Contract(LPabi, LPAddress);

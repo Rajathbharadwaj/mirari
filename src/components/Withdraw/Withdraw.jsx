@@ -101,7 +101,7 @@ const Withdraw = ({ currentWallet }) => {
 		});
 
 		setInterval(function () {
-			MasterContract.methods.pendingFYP(pid, currentWallet).call((err, res) => {
+			MasterContract.methods.pendingSushi(pid, currentWallet).call((err, res) => {
 				if (err) {
 					console.log("An error occured", err);
 					return;
