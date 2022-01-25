@@ -4,6 +4,7 @@ import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Blank from "../../video-thumbnails/blank.png";
 import CreateTokenModal from "containers/CreateTokenModal/CreateTokenModal";
+import Account from "../../components/Account";
 
 const MyChannel = ({ currentWallet }) => {
 	const [open, setOpen] = useState(false);
@@ -88,16 +89,21 @@ const MyChannel = ({ currentWallet }) => {
 							justifyContent: "space-between",
 						}}
 					>
-						<Avatar
-							sx={{
-								height: 64,
-								width: 64,
-								marginRight: "18px",
-							}}
-						/>
-						<Typography>
-							{currentWallet.slice(0, 6)}...{currentWallet.slice(36)}
-						</Typography>
+						{currentWallet && (
+							<>
+								<Avatar
+									sx={{
+										height: 64,
+										width: 64,
+										marginRight: "18px",
+									}}
+								/>
+								<Typography>
+									{currentWallet.slice(0, 6)}...{currentWallet.slice(36)}
+								</Typography>
+							</>
+						)}
+						{!currentWallet && <Account />}
 					</Box>
 				</Grid>
 				<Grid
