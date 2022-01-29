@@ -15,9 +15,11 @@ import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
 
-const Approval = ({ currentWallet }) => {
+const Approval = ({ currentWallet, selectedPool }) => {
 	const web3 = new Web3(window.web3.currentProvider);
-
+	const backgroundColor = "#000000";
+	const color = "#ffffff";
+	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses } = selectedPool;
 	const [balance, setBalance] = useState(0);
 	const [isApproved, setIsApproved] = useState(false);
 	const [dval, setDval] = useState(0);
@@ -33,11 +35,11 @@ const Approval = ({ currentWallet }) => {
 
 		setOpen(false);
 	};
-
 	let approveValue = web3.utils.toWei("100000000000000000");
-	//Pair
+
+	//this is liqudity pool address, not jlp's address
 	const LPabi = LPInfo.abi;
-	const LPAddress = config.fuji.JLP;
+	const LPAddress = lpAddresses[4];
 	const LPContract = new web3.eth.Contract(LPabi, LPAddress);
 	//MasterChef
 	const Masterabi = MasterInfo.abi;
@@ -122,17 +124,44 @@ const Approval = ({ currentWallet }) => {
 		<Box sx={{ alignItems: "center", display: "flex", justifyContent: "center" }}>
 			<Card
 				sx={{
-					width: "450px",
+					width: "32%",
 					marginTop: "32px",
+					height: "400px",
+					borderRadius: "16px",
+					color: color,
+					backgroundColor: backgroundColor,
 				}}
 			>
 				<CardContent>
 					<Box>
-						<Typography variant="h4">DEPOSIT</Typography>
+						<div
+							style={{
+								display: "flex",
+								background: "#2e2e2e",
+								fontSize: "36px",
+								height: "80px",
+								width: "80px",
+								borderRadius: "40px",
+								alignItems: "center",
+								justifyContent: "center",
+								margin: "0 auto 16px",
+								boxShadow: "inset 4px 4px 8px #ff0000, inset -6px -6px 12px #a0a0a0",
+							}}
+						>
+							{icon}
+						</div>
+						<Typography marginBottom="16px" textAlign="center" variant="h4">
+							{name}
+						</Typography>
+						<Typography marginBottom="16px" textAlign="center">
+							Deposit {symbol}
+							<br />
+							Earn DAP
+						</Typography>
 						<div style={{ display: "flex", flexDirection: "column" }}>
 							{!isApproved && (
 								<Button
-									sx={{ marginBottom: "10px" }}
+									sx={{ marginBottom: "10px", backgroundColor: "#e84042" }}
 									variant="contained"
 									onClick={() => checkApproval()}
 								>
@@ -140,21 +169,36 @@ const Approval = ({ currentWallet }) => {
 								</Button>
 							)}
 							{isApproved === false ? (
-								<Button variant="contained" onClick={() => Approval()}>
+								<Button
+									variant="contained"
+									sx={{ backgroundColor: "#e84042" }}
+									onClick={() => Approval()}
+								>
 									Approve
 								</Button>
 							) : (
 								<>
-									<Button variant="contained" onClick={() => Deposit(dval)}>
+									<Button
+										variant="contained"
+										sx={{ backgroundColor: "#e84042" }}
+										onClick={() => Deposit(dval)}
+									>
 										Deposit
 									</Button>
 									<TextField
 										id="mytext1"
-										onChange={(e) => setDval(e.target.value)}
+										onChange={(e) => {
+											const val = e.target.value.replace(/\D/, "");
+											setDval(val);
+										}}
 										placeholder="0"
 										value={dval}
 										inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
 										InputProps={{
+											sx: {
+												color: color,
+												backgroundColor: "#2e2e2e",
+											},
 											endAdornment: (
 												<Button
 													variant="text"
@@ -162,7 +206,7 @@ const Approval = ({ currentWallet }) => {
 													onClick={() => setDval(balance)}
 													align="center"
 												>
-													Deposit Max LP
+													Deposit Max {symbol}
 												</Button>
 											),
 										}}
@@ -171,11 +215,18 @@ const Approval = ({ currentWallet }) => {
 								</>
 							)}
 						</div>
-						<div style={{ marginTop: "16px" }}>Balance In Your Wallet : {balance} LP</div>
+						<div style={{ marginTop: "16px" }}>
+							Balance In Your Wallet : {balance} {symbol}
+						</div>
 					</Box>
 				</CardContent>
 			</Card>
-			<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+			<Snackbar
+				anchorOrigin={{ vertical: "top", horizontal: "center" }}
+				open={open}
+				autoHideDuration={6000}
+				onClose={handleClose}
+			>
 				<Alert onClose={handleClose} severity={alertType} sx={{ width: "100%" }}>
 					<Typography>{alertMessage}</Typography>
 					<Typography>{alertDetails}</Typography>
@@ -187,6 +238,7 @@ const Approval = ({ currentWallet }) => {
 
 const mapStateToProps = (state) => ({
 	currentWallet: state.currentWallet,
+	selectedPool: state.selectedPool,
 });
 
 export default connect(mapStateToProps, null)(Approval);

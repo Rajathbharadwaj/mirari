@@ -1,18 +1,26 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
 // import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Approval from "../../components/Approval/Approval";
 import Withdraw from "../../components/Withdraw/Withdraw";
 import Account from "../../components/Account";
 import { setSelectedCreator } from "../../actions/AppActions";
 import Blank from "../../video-thumbnails/blank.png";
+import FullWidthTabs from "../../components/FullWidthTabs/FullWidthTabs";
 
-const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
-	const location = useLocation();
-	const { creatorName, lpToken, avatarSrc } = selectedCreator;
-	const { tokenName, tokenAddress } = lpToken;
+const CreatorChannel = ({ selectedCreator, currentWallet, channelsList, selectedPool }) => {
+	const { creatorName, avatarSrc } = selectedCreator;
+	const tabs = [
+		{
+			label: "Deposit LP Tokens",
+			content: <Approval />,
+		},
+		{
+			label: "Harvest/Withdraw LP Tokens",
+			content: <Withdraw />,
+		},
+	];
 
 	const channelVideos = [
 		{
@@ -77,26 +85,6 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 		},
 	];
 
-	// update selectedCreator on navigation
-	useEffect(() => {
-		if (location.pathname.split("/")[2]) {
-			const creatorFromUrl = decodeURI(location.pathname.split("/")[2]);
-			if (creatorFromUrl && creatorName !== creatorFromUrl) {
-				const channelObj = channelsList.filter((item) => item.name === creatorFromUrl)[0];
-				if (channelObj) {
-					setSelectedCreator({
-						creatorName: channelObj.name,
-						avatarSrc: channelObj.img,
-						lpToken: {
-							tokenName: channelObj.tokenName,
-							tokenAddress: channelObj.tokenAddress,
-						},
-					});
-				}
-			}
-		}
-	}, [location, creatorName, channelsList]);
-
 	return (
 		<Grid
 			container
@@ -138,8 +126,14 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 			</Grid>
 			{currentWallet !== null && (
 				<Grid item xs={12} sx={{ marginTop: "24px" }}>
-					<Approval />
-					<Withdraw />
+					{selectedPool.name === "" && (
+						<Typography variant="h4" textAlign="center" sx={{ marginTop: "24px" }}>
+							No LP Token and Content found for this creator!
+							<br />
+							Choose another channel from sidebar.
+						</Typography>
+					)}
+					{selectedPool.name !== "" && <FullWidthTabs tabs={tabs} />}
 					{/* <VideoCardsList videoData={channelVideos} /> */}
 				</Grid>
 			)}
@@ -165,6 +159,7 @@ const mapStateToProps = (state) => ({
 	selectedCreator: state.selectedCreator,
 	currentWallet: state.currentWallet,
 	channelsList: state.channelsList,
+	selectedPool: state.selectedPool,
 });
 
 const mapDispatchToProps = {

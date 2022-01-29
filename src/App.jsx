@@ -11,7 +11,7 @@ import Sidebar from "containers/Sidebar/Sidebar";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MyChannel from "containers/MyChannel/MyChannel";
-import { setWalletAddress } from "./actions/AppActions";
+import { setWalletAddress, setSelectedCreator } from "./actions/AppActions";
 import Logo from "./Logo.png";
 import CreatorChannel from "containers/CreatorChannel/CreatorChannel";
 
@@ -62,7 +62,7 @@ const useStyles = createUseStyles({
 		},
 	},
 });
-const App = ({ setWalletAddress }) => {
+const App = ({ setWalletAddress, creatorName, channelsList, setSelectedCreator }) => {
 	const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
 	const { walletAddress } = useMoralisDapp();
 	const classes = useStyles();
@@ -121,6 +121,26 @@ const App = ({ setWalletAddress }) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isAuthenticated, isWeb3Enabled, walletAddress]);
+
+	// setSelectedCreator after browser refresh
+	useEffect(() => {
+		const pathListener = window.addEventListener("DOMContentLoaded", (event) => {
+			if (window.location.pathname.split("/")[2]) {
+				const creatorFromUrl = decodeURI(window.location.pathname.split("/")[2]);
+				if (creatorFromUrl && creatorName !== creatorFromUrl) {
+					const channelObj = channelsList.filter((item) => item.name === creatorFromUrl)[0];
+					if (channelObj) {
+						setSelectedCreator({
+							creatorName: channelObj.name,
+							avatarSrc: channelObj.img,
+							tokenSymbol: channelObj.tokenSymbol,
+						});
+					}
+				}
+			}
+		});
+		return () => window.removeEventListener("DOMContentLoaded", pathListener);
+	}, []);
 
 	return (
 		<Router>
@@ -240,8 +260,14 @@ const App = ({ setWalletAddress }) => {
 	);
 };
 
+const mapStateToProps = (state) => ({
+	selectedCreator: state.selectedCreator,
+	channelsList: state.channelsList,
+});
+
 const mapDispatchToProps = {
 	setWalletAddress,
+	setSelectedCreator,
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

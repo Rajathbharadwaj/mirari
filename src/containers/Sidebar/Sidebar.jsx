@@ -26,9 +26,14 @@ const useStyles = createUseStyles({
 	},
 });
 
-const Sidebar = ({ channelsList, setSelectedCreator }) => {
+const Sidebar = ({ channelsList, setSelectedCreator, creatorName }) => {
 	const styles = useStyles();
-
+	const selected = {
+		cursor: "pointer",
+		border: "1px solid #c4c4c4",
+		borderRadius: "8%",
+		backdropFilter: "brightness(0.1)",
+	};
 	return (
 		<Box
 			sx={{
@@ -52,22 +57,18 @@ const Sidebar = ({ channelsList, setSelectedCreator }) => {
 					<NavLink key={channel.name} className={styles.link} to={`/creator/${channel.name}`}>
 						<ListItem
 							key={channel.img}
-							sx={{
-								":hover": {
-									cursor: "pointer",
-									border: "1px solid #c4c4c4",
-									borderRadius: "8%",
-									backdropFilter: "brightness(0.1)",
-								},
-							}}
+							sx={
+								channel.name !== creatorName
+									? {
+											":hover": selected,
+									  }
+									: selected
+							}
 							onClick={() => {
 								setSelectedCreator({
 									creatorName: channel.name,
 									avatarSrc: channel.img,
-									lpToken: {
-										tokenName: channel.tokenName,
-										tokenAddress: channel.tokenAddress,
-									},
+									tokenSymbol: channel.tokenSymbol,
 								});
 							}}
 						>
@@ -106,6 +107,7 @@ const Sidebar = ({ channelsList, setSelectedCreator }) => {
 
 const mapStateToProps = (state) => ({
 	channelsList: state.channelsList,
+	creatorName: state.selectedCreator.creatorName,
 });
 
 const mapDispatchToProps = {

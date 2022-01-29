@@ -1,4 +1,5 @@
 import { SET_SELECTED_CREATOR, SET_WALLET_ADDRESS } from "../actions/AppActions";
+import supportedPools from "../contracts/supportedPools";
 import AvalancheOfficial from "../avatars/avalanche.jpeg";
 import Avalaunch from "../avatars/avalaunch.jpeg";
 import AlexBecker from "../avatars/becker.jpeg";
@@ -14,68 +15,76 @@ const initialState = {
 			img: MoralisWeb3,
 			name: "Moralis Web 3",
 			live: true,
-			tokenName: "MKBHD-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "MRLS",
 		},
 		{
 			img: AvalancheOfficial,
 			name: "Avalanche",
 			live: false,
-			tokenName: "MKBHD-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "",
 		},
 		{
 			img: MKBHD,
 			name: "Marques Brownlee",
 			live: true,
-			tokenName: "MKBHD-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "MRKS",
 		},
 		{
 			img: Avalaunch,
 			name: "Avalaunch",
 			live: false,
-			tokenName: "MKBHD-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "",
 		},
 		{
 			img: AlexBecker,
 			name: "Alex Becker",
 			live: true,
-			tokenName: "Becker-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "ABEKR",
 		},
 		{
 			img: FrogRadio,
 			name: "Frog Radio",
 			live: false,
-			tokenName: "FrogNation-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "",
 		},
 		{
 			img: CryptoCred,
 			name: "Crypto Cred",
 			live: true,
-			tokenName: "CRED-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "",
 		},
 		{
 			img: TheDefiant,
 			name: "The Defiant",
 			live: false,
-			tokenName: "MKBHD-AVAX LP",
-			tokenAddress: "",
+			tokenSymbol: "",
 		},
 	],
 	selectedCreator: {
 		creatorName: "",
 		avatarSrc: "",
-		lpToken: {
-			tokenName: "",
-			tokenAddress: "",
-		},
+		tokenSymbol: "",
 	},
+	pools: supportedPools,
 	currentWallet: null,
+	selectedPool: {
+		pid: 0,
+		lpAddresses: null,
+		tokenAddresses: null,
+		name: "",
+		symbol: "",
+		tokenSymbol: "",
+		icon: "",
+	},
+};
+
+const setSelectedPool = (payload, state) => {
+	const correctPool = state.pools.filter((item) => item.tokenSymbol === payload.tokenSymbol)[0];
+	if (correctPool) {
+		return correctPool;
+	} else {
+		return initialState.selectedPool;
+	}
 };
 
 const appReducer = (state = initialState, action) => {
@@ -85,6 +94,7 @@ const appReducer = (state = initialState, action) => {
 			return {
 				...state,
 				selectedCreator: payload,
+				selectedPool: setSelectedPool(payload, state),
 			};
 		case SET_WALLET_ADDRESS:
 			return {
