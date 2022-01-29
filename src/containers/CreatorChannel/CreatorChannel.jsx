@@ -9,7 +9,7 @@ import { setSelectedCreator } from "../../actions/AppActions";
 import Blank from "../../video-thumbnails/blank.png";
 import FullWidthTabs from "../../components/FullWidthTabs/FullWidthTabs";
 
-const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
+const CreatorChannel = ({ selectedCreator, currentWallet, channelsList, selectedPool }) => {
 	const { creatorName, avatarSrc } = selectedCreator;
 	const tabs = [
 		{
@@ -126,7 +126,14 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 			</Grid>
 			{currentWallet !== null && (
 				<Grid item xs={12} sx={{ marginTop: "24px" }}>
-					<FullWidthTabs tabs={tabs} />
+					{selectedPool.name === "" && (
+						<Typography variant="h4" textAlign="center" sx={{ marginTop: "24px" }}>
+							No LP Token and Content found for this creator!
+							<br />
+							Choose another channel from sidebar.
+						</Typography>
+					)}
+					{selectedPool.name !== "" && <FullWidthTabs tabs={tabs} />}
 					{/* <VideoCardsList videoData={channelVideos} /> */}
 				</Grid>
 			)}
@@ -152,6 +159,7 @@ const mapStateToProps = (state) => ({
 	selectedCreator: state.selectedCreator,
 	currentWallet: state.currentWallet,
 	channelsList: state.channelsList,
+	selectedPool: state.selectedPool,
 });
 
 const mapDispatchToProps = {

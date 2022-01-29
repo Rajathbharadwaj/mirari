@@ -35,11 +35,11 @@ const Approval = ({ currentWallet, selectedPool }) => {
 
 		setOpen(false);
 	};
-
 	let approveValue = web3.utils.toWei("100000000000000000");
-	//this is liqudity pool address, no jlp's address
+
+	//this is liqudity pool address, not jlp's address
 	const LPabi = LPInfo.abi;
-	const LPAddress = config.fuji.JLP;
+	const LPAddress = lpAddresses[4];
 	const LPContract = new web3.eth.Contract(LPabi, LPAddress);
 	//MasterChef
 	const Masterabi = MasterInfo.abi;
