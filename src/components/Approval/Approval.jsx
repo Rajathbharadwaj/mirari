@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { connect } from "react-redux";
 import {
 	Button,
@@ -14,12 +15,13 @@ import LPInfo from "../../contracts/abis/fuji/JLP.json";
 import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
+import useInterval from "../../hooks/useInterval";
 
 const Approval = ({ currentWallet, selectedPool }) => {
 	const web3 = new Web3(window.web3.currentProvider);
 	const backgroundColor = "#000000";
 	const color = "#ffffff";
-	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses } = selectedPool;
+	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses, pid } = selectedPool;
 	const [balance, setBalance] = useState(0);
 	const [isApproved, setIsApproved] = useState(false);
 	const [dval, setDval] = useState(0);
@@ -45,12 +47,10 @@ const Approval = ({ currentWallet, selectedPool }) => {
 	const Masterabi = MasterInfo.abi;
 	const masterChefAddress = config.fuji.MasterChef;
 	const MasterContract = new web3.eth.Contract(Masterabi, masterChefAddress);
-	const pid = config.fuji.pid;
 
 	function Deposit(value) {
-		//write contract
-		// setDval(document.querySelector('input').value)
 		let key = web3.utils.toWei(value);
+		console.info("key", key);
 		// let key=BigNumber(value *config.decimals)
 		MasterContract.methods.deposit(pid, key).send({ from: currentWallet }, function (err, res) {
 			if (err) {
@@ -61,7 +61,7 @@ const Approval = ({ currentWallet, selectedPool }) => {
 				console.log("An error occured", err);
 				return;
 			} else {
-				setAlertType("info");
+				setAlertType("success");
 				setAlertMessage("🔊 New Transaction");
 				setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 				setOpen(true);
@@ -120,6 +120,8 @@ const Approval = ({ currentWallet, selectedPool }) => {
 		//
 	}
 
+	useInterval(() => checkApproval(), 1500);
+
 	return (
 		<Box sx={{ alignItems: "center", display: "flex", justifyContent: "center" }}>
 			<Card
@@ -159,22 +161,13 @@ const Approval = ({ currentWallet, selectedPool }) => {
 							Earn DAP
 						</Typography>
 						<div style={{ display: "flex", flexDirection: "column" }}>
-							{!isApproved && (
-								<Button
-									sx={{ marginBottom: "10px", backgroundColor: "#e84042" }}
-									variant="contained"
-									onClick={() => checkApproval()}
-								>
-									Check Your Approval
-								</Button>
-							)}
 							{isApproved === false ? (
 								<Button
 									variant="contained"
 									sx={{ backgroundColor: "#e84042" }}
 									onClick={() => Approval()}
 								>
-									Approve
+									Approve {symbol}
 								</Button>
 							) : (
 								<>
@@ -183,7 +176,7 @@ const Approval = ({ currentWallet, selectedPool }) => {
 										sx={{ backgroundColor: "#e84042" }}
 										onClick={() => Deposit(dval)}
 									>
-										Deposit
+										Deposit {symbol}
 									</Button>
 									<TextField
 										id="mytext1"
@@ -206,7 +199,7 @@ const Approval = ({ currentWallet, selectedPool }) => {
 													onClick={() => setDval(balance)}
 													align="center"
 												>
-													Deposit Max {symbol}
+													Deposit Max {symbol.replace("LP", "")}
 												</Button>
 											),
 										}}

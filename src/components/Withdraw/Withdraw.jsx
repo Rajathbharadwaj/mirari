@@ -13,6 +13,7 @@ import { useState } from "react";
 import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
+import useInterval from "../../hooks/useInterval";
 
 const Withdraw = ({ currentWallet, selectedPool }) => {
 	const web3 = new Web3(window.web3.currentProvider);
@@ -99,19 +100,21 @@ const Withdraw = ({ currentWallet, selectedPool }) => {
 				setParticipate(false);
 			}
 		});
-
-		setInterval(function () {
-			MasterContract.methods.pendingSushi(pid, currentWallet).call((err, res) => {
-				if (err) {
-					console.log("An error occured", err);
-					return;
-				}
-				console.log("Reward is: ", res);
-
-				setReward(web3.utils.fromWei(res));
-			});
-		}, 8000);
 	}
+
+	setInterval(function () {
+		MasterContract.methods.pendingSushi(pid, currentWallet).call((err, res) => {
+			if (err) {
+				console.log("An error occured", err);
+				return;
+			}
+			console.log("Reward is: ", res);
+
+			setReward(web3.utils.fromWei(res));
+		});
+	}, 8000);
+
+	useInterval(() => Participate(), 1500);
 
 	return (
 		<Box sx={{ alignItems: "center", display: "flex", justifyContent: "center" }}>
@@ -146,63 +149,64 @@ const Withdraw = ({ currentWallet, selectedPool }) => {
 						<Typography marginBottom="16px" textAlign="center" variant="h4">
 							{name}
 						</Typography>
-						<Button
-							sx={{ marginBottom: "10px", backgroundColor: "#e84042" }}
-							variant="contained"
-							onClick={() => Participate()}
-						>
-							Check Your Partcipation
-						</Button>
-						{participate === false ? (
-							<Typography>Please Deposit {symbol} Token First</Typography>
-						) : (
-							<>
-								<Button
-									variant="contained"
-									sx={{ backgroundColor: "#e84042" }}
-									onClick={() => WithdrawFunds(wval)}
-								>
-									Withdraw
-								</Button>
-								<TextField
-									id="mytext1"
-									onChange={(e) => setWval(e.target.value)}
-									placeholder="0"
-									value={wval}
-									inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-									InputProps={{
-										sx: {
-											color: color,
-											backgroundColor: "#2e2e2e",
-										},
-										endAdornment: (
-											<Button
-												variant="text"
-												sx={{ width: "100%" }}
-												onClick={() => setWval(balance)}
-												align="center"
-											>
-												Withdraw Max {symbol}
-											</Button>
-										),
-									}}
-									sx={{ marginTop: "16px" }}
-								/>
-								<div style={{ marginTop: "16px" }}>
-									Reward Earned : {reward} FYP
+						<div style={{ display: "flex", flexDirection: "column" }}>
+							{participate === false ? (
+								<Typography>Please Deposit {symbol} Token First</Typography>
+							) : (
+								<>
 									<Button
 										variant="contained"
 										sx={{ backgroundColor: "#e84042" }}
-										onClick={() => Deposit(0)}
+										onClick={() => WithdrawFunds(wval)}
 									>
-										Harvest
+										Withdraw {symbol}
 									</Button>
-								</div>
-								<div style={{ marginTop: "16px" }}>
-									Staked Balance : {balance} {symbol}
-								</div>
-							</>
-						)}
+									<TextField
+										id="mytext1"
+										onChange={(e) => setWval(e.target.value)}
+										placeholder="0"
+										value={wval}
+										inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+										InputProps={{
+											sx: {
+												color: color,
+												backgroundColor: "#2e2e2e",
+											},
+											endAdornment: (
+												<Button
+													variant="text"
+													sx={{ width: "100%" }}
+													onClick={() => setWval(balance)}
+												>
+													Withdraw Max {symbol.replace("LP", "")}
+												</Button>
+											),
+										}}
+										sx={{ marginTop: "16px" }}
+									/>
+									<div
+										style={{
+											display: "flex",
+											marginTop: "16px",
+											alignItems: "center",
+											justifyContent: "left",
+										}}
+									>
+										Reward Earned : {reward} DAP
+										<Button
+											variant="contained"
+											sx={{ backgroundColor: "#e84042", marginLeft: "16px" }}
+											onClick={() => Deposit(0)}
+										>
+											Harvest
+										</Button>
+									</div>
+									<div style={{ marginTop: "16px" }}>
+										Staked Balance : {balance} {symbol}
+									</div>
+								</>
+							)}
+						</div>
 					</Box>
 				</CardContent>
 			</Card>
