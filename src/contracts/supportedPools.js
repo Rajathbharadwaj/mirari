@@ -15,7 +15,7 @@ const supportedPools = [
 	{
 		pid: 1,
 		lpAddresses: {
-			4: "0x2e684A232df88A7fF6BCf89b920a7d26AFb7Aa2b", // LP Token Address
+			4: "0x2a9659E19BEd55e6D21daa6187319b7286e98D4E", // LP Token Address
 		},
 		tokenAddresses: {
 			4: "0x919947D232BfC39f4544062001008834fce06dAf", // Token, i.e. "DAI"
