@@ -1,5 +1,3 @@
-import MoralisIcon from "../avatars/moralis.jpeg";
-
 const supportedPools = [
 	{
 		pid: 0,
@@ -38,7 +36,7 @@ const supportedPools = [
 		name: "Moralis WAVAX LP",
 		symbol: "MRLS-AVAX LP",
 		tokenSymbol: "MRLS",
-		icon: <img src={<MoralisIcon />} alt="MRLS-AVAX LP" />,
+		icon: "🍁",
 	},
 ];
 

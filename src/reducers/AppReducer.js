@@ -15,7 +15,7 @@ const initialState = {
 			img: MoralisWeb3,
 			name: "Moralis Web 3",
 			live: true,
-			tokenSymbol: "RMLS",
+			tokenSymbol: "MRLS",
 		},
 		{
 			img: AvalancheOfficial,

@@ -17,9 +17,9 @@ import config from "../../contracts/config";
 
 const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 	const web3 = new Web3(window.web3.currentProvider);
-	const backgroundColor = "#e84042";
-	const color = "#fff";
-
+	const backgroundColor = "#000000";
+	const color = "#ffffff";
+	let icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses;
 	const [balance, setBalance] = useState(0);
 	const [isApproved, setIsApproved] = useState(false);
 	const [dval, setDval] = useState(0);
@@ -28,7 +28,15 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
 
-	const selectedCreatorPool = pools.filter((item) => item.tokenSymbol === creatorTokenSymbol);
+	const selectedCreatorPool = pools.filter((item) => item.tokenSymbol === creatorTokenSymbol)[0];
+	if (selectedCreatorPool) {
+		icon = selectedCreatorPool.icon;
+		name = selectedCreatorPool.name;
+		symbol = selectedCreatorPool.symbol;
+		tokenSymbol = selectedCreatorPool.tokenSymbol;
+		lpAddresses = selectedCreatorPool.lpAddresses;
+		tokenAddresses = selectedCreatorPool.tokenAddresses;
+	}
 	console.info("selectedCreatorPool", selectedCreatorPool);
 
 	const handleClose = (event, reason) => {
@@ -127,9 +135,9 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 		<Box sx={{ alignItems: "center", display: "flex", justifyContent: "center" }}>
 			<Card
 				sx={{
-					width: "52%",
+					width: "32%",
 					marginTop: "32px",
-					height: "300px",
+					height: "400px",
 					borderRadius: "16px",
 					color: color,
 					backgroundColor: backgroundColor,
@@ -137,13 +145,34 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 			>
 				<CardContent>
 					<Box>
+						<div
+							style={{
+								display: "flex",
+								background: "#2e2e2e",
+								fontSize: "36px",
+								height: "80px",
+								width: "80px",
+								borderRadius: "40px",
+								alignItems: "center",
+								justifyContent: "center",
+								margin: "0 auto 16px",
+								boxShadow: "inset 4px 4px 8px #ff0000, inset -6px -6px 12px #a0a0a0",
+							}}
+						>
+							{icon}
+						</div>
 						<Typography marginBottom="16px" textAlign="center" variant="h4">
-							DEPOSIT LP
+							{name}
+						</Typography>
+						<Typography marginBottom="16px" textAlign="center">
+							Deposit {symbol}
+							<br />
+							Earn DAP
 						</Typography>
 						<div style={{ display: "flex", flexDirection: "column" }}>
 							{!isApproved && (
 								<Button
-									sx={{ marginBottom: "10px" }}
+									sx={{ marginBottom: "10px", backgroundColor: "#e84042" }}
 									variant="contained"
 									onClick={() => checkApproval()}
 								>
@@ -151,21 +180,36 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 								</Button>
 							)}
 							{isApproved === false ? (
-								<Button variant="contained" onClick={() => Approval()}>
+								<Button
+									variant="contained"
+									sx={{ backgroundColor: "#e84042" }}
+									onClick={() => Approval()}
+								>
 									Approve
 								</Button>
 							) : (
 								<>
-									<Button variant="contained" onClick={() => Deposit(dval)}>
+									<Button
+										variant="contained"
+										sx={{ backgroundColor: "#e84042" }}
+										onClick={() => Deposit(dval)}
+									>
 										Deposit
 									</Button>
 									<TextField
 										id="mytext1"
-										onChange={(e) => setDval(e.target.value)}
+										onChange={(e) => {
+											const val = e.target.value.replace(/\D/, "");
+											setDval(val);
+										}}
 										placeholder="0"
 										value={dval}
 										inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
 										InputProps={{
+											sx: {
+												color: color,
+												backgroundColor: "#2e2e2e",
+											},
 											endAdornment: (
 												<Button
 													variant="text"
