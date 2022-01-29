@@ -12,8 +12,7 @@ import FullWidthTabs from "../../components/FullWidthTabs/FullWidthTabs";
 
 const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 	const location = useLocation();
-	const { creatorName, lpToken, avatarSrc } = selectedCreator;
-	const { tokenName, tokenAddress } = lpToken;
+	const { creatorName, avatarSrc } = selectedCreator;
 	const tabs = [
 		{
 			label: "Deposit LP Tokens",
@@ -99,7 +98,7 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 						creatorName: channelObj.name,
 						avatarSrc: channelObj.img,
 						lpToken: {
-							tokenName: channelObj.tokenName,
+							tokenSymbol: channelObj.tokenSymbol,
 							tokenAddress: channelObj.tokenAddress,
 						},
 					});

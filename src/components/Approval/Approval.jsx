@@ -15,7 +15,7 @@ import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
 
-const Approval = ({ currentWallet }) => {
+const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 	const web3 = new Web3(window.web3.currentProvider);
 	const backgroundColor = "#e84042";
 	const color = "#fff";
@@ -27,6 +27,9 @@ const Approval = ({ currentWallet }) => {
 	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
+
+	const selectedCreatorPool = pools.filter((item) => item.tokenSymbol === creatorTokenSymbol);
+	console.info("selectedCreatorPool", selectedCreatorPool);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -200,6 +203,8 @@ const Approval = ({ currentWallet }) => {
 
 const mapStateToProps = (state) => ({
 	currentWallet: state.currentWallet,
+	pools: state.pools,
+	creatorTokenSymbol: state.selectedCreator.tokenSymbol,
 });
 
 export default connect(mapStateToProps, null)(Approval);

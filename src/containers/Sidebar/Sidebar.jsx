@@ -68,10 +68,7 @@ const Sidebar = ({ channelsList, setSelectedCreator, creatorName }) => {
 								setSelectedCreator({
 									creatorName: channel.name,
 									avatarSrc: channel.img,
-									lpToken: {
-										tokenName: channel.tokenName,
-										tokenAddress: channel.tokenAddress,
-									},
+									tokenSymbol: channel.tokenSymbol,
 								});
 							}}
 						>
