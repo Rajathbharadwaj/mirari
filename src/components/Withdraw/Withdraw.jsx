@@ -164,7 +164,7 @@ const Withdraw = ({ currentWallet, pools, creatorTokenSymbol }) => {
 							Check Your Partcipation
 						</Button>
 						{participate === false ? (
-							<Typography>Please Deposit LP Token First</Typography>
+							<Typography>Please Deposit {symbol} Token First</Typography>
 						) : (
 							<>
 								<Button
@@ -192,7 +192,7 @@ const Withdraw = ({ currentWallet, pools, creatorTokenSymbol }) => {
 												onClick={() => setWval(balance)}
 												align="center"
 											>
-												Withdraw Max LP
+												Withdraw Max {symbol}
 											</Button>
 										),
 									}}
@@ -208,7 +208,9 @@ const Withdraw = ({ currentWallet, pools, creatorTokenSymbol }) => {
 										Harvest
 									</Button>
 								</div>
-								<div style={{ marginTop: "16px" }}>Staked Balance : {balance} LP</div>
+								<div style={{ marginTop: "16px" }}>
+									Staked Balance : {balance} {symbol}
+								</div>
 							</>
 						)}
 					</Box>

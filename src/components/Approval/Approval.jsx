@@ -217,7 +217,7 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 													onClick={() => setDval(balance)}
 													align="center"
 												>
-													Deposit Max LP
+													Deposit Max {symbol}
 												</Button>
 											),
 										}}
@@ -226,7 +226,9 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 								</>
 							)}
 						</div>
-						<div style={{ marginTop: "16px" }}>Balance In Your Wallet : {balance} LP</div>
+						<div style={{ marginTop: "16px" }}>
+							Balance In Your Wallet : {balance} {symbol}
+						</div>
 					</Box>
 				</CardContent>
 			</Card>
