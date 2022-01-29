@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
 // import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
 import Approval from "../../components/Approval/Approval";
 import Withdraw from "../../components/Withdraw/Withdraw";
@@ -11,7 +10,6 @@ import Blank from "../../video-thumbnails/blank.png";
 import FullWidthTabs from "../../components/FullWidthTabs/FullWidthTabs";
 
 const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
-	const location = useLocation();
 	const { creatorName, avatarSrc } = selectedCreator;
 	const tabs = [
 		{
@@ -86,26 +84,6 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList }) => {
 			content: "",
 		},
 	];
-
-	// update selectedCreator on navigation
-	useEffect(() => {
-		if (location.pathname.split("/")[2]) {
-			const creatorFromUrl = decodeURI(location.pathname.split("/")[2]);
-			if (creatorFromUrl && creatorName !== creatorFromUrl) {
-				const channelObj = channelsList.filter((item) => item.name === creatorFromUrl)[0];
-				if (channelObj) {
-					setSelectedCreator({
-						creatorName: channelObj.name,
-						avatarSrc: channelObj.img,
-						lpToken: {
-							tokenSymbol: channelObj.tokenSymbol,
-							tokenAddress: channelObj.tokenAddress,
-						},
-					});
-				}
-			}
-		}
-	}, [location, creatorName, channelsList]);
 
 	return (
 		<Grid

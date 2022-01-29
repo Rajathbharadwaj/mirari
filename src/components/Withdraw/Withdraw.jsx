@@ -14,21 +14,11 @@ import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
 
-const Withdraw = ({ currentWallet, pools, creatorTokenSymbol }) => {
+const Withdraw = ({ currentWallet, selectedPool }) => {
 	const web3 = new Web3(window.web3.currentProvider);
 	const backgroundColor = "#000000";
 	const color = "#ffffff";
-	let icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses;
-	const selectedCreatorPool = pools.filter((item) => item.tokenSymbol === creatorTokenSymbol)[0];
-	if (selectedCreatorPool) {
-		icon = selectedCreatorPool.icon;
-		name = selectedCreatorPool.name;
-		symbol = selectedCreatorPool.symbol;
-		tokenSymbol = selectedCreatorPool.tokenSymbol;
-		lpAddresses = selectedCreatorPool.lpAddresses;
-		tokenAddresses = selectedCreatorPool.tokenAddresses;
-	}
-	console.info("selectedCreatorPool", selectedCreatorPool);
+	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses } = selectedPool;
 	//MasterChef
 	const Masterabi = MasterInfo.abi;
 	const masterChefAddress = config.fuji.MasterChef;
@@ -234,8 +224,7 @@ const Withdraw = ({ currentWallet, pools, creatorTokenSymbol }) => {
 
 const mapStateToProps = (state) => ({
 	currentWallet: state.currentWallet,
-	pools: state.pools,
-	creatorTokenSymbol: state.selectedCreator.tokenSymbol,
+	selectedPool: state.selectedPool,
 });
 
 export default connect(mapStateToProps, null)(Withdraw);

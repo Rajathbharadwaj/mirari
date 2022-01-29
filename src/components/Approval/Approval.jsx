@@ -15,11 +15,11 @@ import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
 
-const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
+const Approval = ({ currentWallet, selectedPool }) => {
 	const web3 = new Web3(window.web3.currentProvider);
 	const backgroundColor = "#000000";
 	const color = "#ffffff";
-	let icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses;
+	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses } = selectedPool;
 	const [balance, setBalance] = useState(0);
 	const [isApproved, setIsApproved] = useState(false);
 	const [dval, setDval] = useState(0);
@@ -27,17 +27,6 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
-
-	const selectedCreatorPool = pools.filter((item) => item.tokenSymbol === creatorTokenSymbol)[0];
-	if (selectedCreatorPool) {
-		icon = selectedCreatorPool.icon;
-		name = selectedCreatorPool.name;
-		symbol = selectedCreatorPool.symbol;
-		tokenSymbol = selectedCreatorPool.tokenSymbol;
-		lpAddresses = selectedCreatorPool.lpAddresses;
-		tokenAddresses = selectedCreatorPool.tokenAddresses;
-	}
-	console.info("selectedCreatorPool", selectedCreatorPool);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -249,8 +238,7 @@ const Approval = ({ currentWallet, pools, creatorTokenSymbol }) => {
 
 const mapStateToProps = (state) => ({
 	currentWallet: state.currentWallet,
-	pools: state.pools,
-	creatorTokenSymbol: state.selectedCreator.tokenSymbol,
+	selectedPool: state.selectedPool,
 });
 
 export default connect(mapStateToProps, null)(Approval);

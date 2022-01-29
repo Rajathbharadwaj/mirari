@@ -67,6 +67,24 @@ const initialState = {
 	},
 	pools: supportedPools,
 	currentWallet: null,
+	selectedPool: {
+		pid: 0,
+		lpAddresses: null,
+		tokenAddresses: null,
+		name: "",
+		symbol: "",
+		tokenSymbol: "",
+		icon: "",
+	},
+};
+
+const setSelectedPool = (payload, state) => {
+	const correctPool = state.pools.filter((item) => item.tokenSymbol === payload.tokenSymbol)[0];
+	if (correctPool) {
+		return correctPool;
+	} else {
+		return initialState.selectedPool;
+	}
 };
 
 const appReducer = (state = initialState, action) => {
@@ -76,6 +94,7 @@ const appReducer = (state = initialState, action) => {
 			return {
 				...state,
 				selectedCreator: payload,
+				selectedPool: setSelectedPool(payload, state),
 			};
 		case SET_WALLET_ADDRESS:
 			return {
