@@ -82,13 +82,12 @@ const Stake = ({
 			})
 			.on("transactionHash", (tx) => {
 				setAlertType("success");
-				setAlertMessage("🔊 New Transaction");
+				setAlertMessage("🔊 Deposit Successful");
 				setAlertDetails(`📃 Tx Hash: ${tx}`);
 				setOpen(true);
 				console.log("Hash of the transaction: " + tx);
-				if (value === "0") {
-					closeModal();
-				}
+				closeModal();
+				getLpBalance();
 			});
 	}
 
@@ -123,21 +122,32 @@ const Stake = ({
 
 	function withdrawFunds(value) {
 		let amountInWei = web3.utils.toWei(value.toString());
-		MasterContract.methods.withdraw(pid, amountInWei).send({ from: currentWallet }, (err, res) => {
-			if (err) {
-				setAlertType("error");
-				setAlertMessage("Approval failed!");
-				setAlertDetails(`📃 Tx Hash: ${err.message}`);
+		MasterContract.methods
+			.withdraw(pid, amountInWei)
+			.send({ from: currentWallet }, (err, res) => {
+				if (err) {
+					setAlertType("error");
+					setAlertMessage("Approval failed!");
+					setAlertDetails(`📃 Tx Hash: ${err.message}`);
+					setOpen(true);
+					console.log("An error occured", err);
+				} else {
+					setAlertType("success");
+					setAlertMessage("🔊 New Transaction");
+					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
+					setOpen(true);
+					console.log("Hash of the transaction: " + res);
+				}
+			})
+			.on("transactionHash", (tx) => {
+				setAlertType("success");
+				setAlertMessage("🔊 Withdraw Successful");
+				setAlertDetails(`📃 Tx Hash: ${tx}`);
 				setOpen(true);
-				console.log("An error occured", err);
-			} else {
-				setAlertType("info");
-				setAlertMessage("🔊 New Transaction");
-				setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
-				setOpen(true);
-				console.log("Hash of the transaction: " + res);
-			}
-		});
+				console.log("Hash of the transaction: " + tx);
+				closeModal();
+				getLpBalance();
+			});
 	}
 
 	function fetchStakedBalanceFromMasterChef() {
@@ -187,7 +197,7 @@ const Stake = ({
 
 	// fetch latest lpBalance
 	useEffect(() => {
-		if (lpApproved && lpBalance === "0" && assets && assets.length && assets.length > 0) {
+		if (lpApproved && lpBalance === 0 && assets && assets.length && assets.length > 0) {
 			const balance = assets.filter((item) => item.token_address === LPAddress)[0];
 			if (balance) {
 				setLpBalance(balance / config.decimals);
@@ -206,14 +216,14 @@ const Stake = ({
 
 	// fetch latest staked balance
 	useEffect(() => {
-		if (lpApproved && lpBalance > "0" && stakedBalance === "0") {
+		if (lpApproved && lpBalance > 0 && stakedBalance === 0) {
 			fetchStakedBalanceFromMasterChef();
 		}
 	}, [lpApproved, lpBalance, stakedBalance]);
 
 	// fecth latest reward
 	useEffect(() => {
-		if (lpApproved && lpBalance > "0" && stakedBalance > "0") {
+		if (lpApproved && lpBalance > 0 && stakedBalance > 0) {
 			MasterContract.methods.pendingSushi(pid, currentWallet).call((err, res) => {
 				if (err) {
 					console.log("An error occured", err);
@@ -414,7 +424,7 @@ const Stake = ({
 												symbol,
 												closeModal,
 												title: `Deposit ${symbol}`,
-
+												maxValue: Number(lpBalance),
 												onConfirm: (value) => {
 													Deposit(value);
 												},
