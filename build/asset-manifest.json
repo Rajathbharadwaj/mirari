@@ -1,20 +1,26 @@
 {
   "files": {
     "main.css": "/static/css/main.514bacaf.chunk.css",
-    "main.js": "/static/js/main.39f1da9f.chunk.js",
-    "main.js.map": "/static/js/main.39f1da9f.chunk.js.map",
+    "main.js": "/static/js/main.04dfcb38.chunk.js",
+    "main.js.map": "/static/js/main.04dfcb38.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.db12425f.js",
     "runtime-main.js.map": "/static/js/runtime-main.db12425f.js.map",
-    "static/js/2.edc75ab0.chunk.js": "/static/js/2.edc75ab0.chunk.js",
-    "static/js/2.edc75ab0.chunk.js.map": "/static/js/2.edc75ab0.chunk.js.map",
+    "static/js/2.49460789.chunk.js": "/static/js/2.49460789.chunk.js",
+    "static/js/2.49460789.chunk.js.map": "/static/js/2.49460789.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.514bacaf.chunk.css.map": "/static/css/main.514bacaf.chunk.css.map",
-    "static/js/2.edc75ab0.chunk.js.LICENSE.txt": "/static/js/2.edc75ab0.chunk.js.LICENSE.txt",
+    "static/js/2.49460789.chunk.js.LICENSE.txt": "/static/js/2.49460789.chunk.js.LICENSE.txt",
+    "static/media/100x.50d80cfa.png": "/static/media/100x.50d80cfa.png",
+    "static/media/2022tech.522953c7.png": "/static/media/2022tech.522953c7.png",
+    "static/media/OnePlus10Pro.1c32465a.png": "/static/media/OnePlus10Pro.1c32465a.png",
     "static/media/ama.7014d2f6.png": "/static/media/ama.7014d2f6.png",
     "static/media/avax-tutorial.9104ad08.png": "/static/media/avax-tutorial.9104ad08.png",
     "static/media/blank.82e27107.png": "/static/media/blank.82e27107.png",
+    "static/media/bubbles.086c7a36.png": "/static/media/bubbles.086c7a36.png",
     "static/media/crabada.6ffd6634.png": "/static/media/crabada.6ffd6634.png",
     "static/media/crypto-influencer.033a61b1.png": "/static/media/crypto-influencer.033a61b1.png",
+    "static/media/future.5b44a510.png": "/static/media/future.5b44a510.png",
+    "static/media/gainz.9992761f.png": "/static/media/gainz.9992761f.png",
     "static/media/imperium.7dd619c3.png": "/static/media/imperium.7dd619c3.png",
     "static/media/influencer-lol.b87afa52.png": "/static/media/influencer-lol.b87afa52.png",
     "static/media/infura.9d639e25.png": "/static/media/infura.9d639e25.png",
@@ -23,8 +29,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.db12425f.js",
-    "static/js/2.edc75ab0.chunk.js",
+    "static/js/2.49460789.chunk.js",
     "static/css/main.514bacaf.chunk.css",
-    "static/js/main.39f1da9f.chunk.js"
+    "static/js/main.04dfcb38.chunk.js"
   ]
 }

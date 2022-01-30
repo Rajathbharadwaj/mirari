@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
-// import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
+import VideoCardsList from "../../containers/VideoCardsList/VideoCardsList";
 import Account from "../../components/Account";
 import { setSelectedCreator } from "../../actions/AppActions";
 import Blank from "../../video-thumbnails/blank.png";
 import Stake from "../../components/Stake/Stake";
+import HundredX from "../../video-thumbnails/100x.png";
+import Tech22 from "../../video-thumbnails/2022tech.png";
+import Bubbles from "../../video-thumbnails/bubbles.png";
+import Future from "../../video-thumbnails/future.png";
+import Gainz from "../../video-thumbnails/gainz.png";
+import OnePlus from "../../video-thumbnails/OnePlus10Pro.png";
 
 const ChannelLayout = ({ creatorName, avatarSrc, children }) => (
 	<Grid
@@ -50,10 +57,16 @@ const ChannelLayout = ({ creatorName, avatarSrc, children }) => (
 	</Grid>
 );
 
-const CreatorChannel = ({ selectedCreator, currentWallet, channelsList, selectedPool }) => {
+const CreatorChannel = ({
+	selectedCreator,
+	currentWallet,
+	channelsList,
+	hasUserStaked,
+	selectedPool,
+}) => {
 	const { creatorName, avatarSrc } = selectedCreator;
 	const { name } = selectedPool;
-	const channelVideos = [
+	const [channelVideos, setChannelVidoes] = useState([
 		{
 			imgSrc: Blank,
 			altTag: "no video",
@@ -61,60 +74,58 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList, selected
 		},
 		{
 			imgSrc: Blank,
-			altTag: "no video",
+			altTag: "",
 			content: "",
 		},
 		{
 			imgSrc: Blank,
-			altTag: "no video",
+			altTag: "",
 			content: "",
 		},
+	]);
+	const beckerVideos = [
 		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
+			imgSrc: Gainz,
+			altTag: "These 5 NEW NFTs Will 50x Next Week (HUGE DROP LIST)",
+			content: "These 5 NEW NFTs Will 50x Next Week (HUGE DROP LIST)",
 		},
 		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
+			imgSrc: Future,
+			altTag: "Why I Only Invest In Crypto Gaming",
+			content: "Why I Only Invest In Crypto Gaming",
 		},
 		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
-		},
-		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
-		},
-		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
-		},
-		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
-		},
-		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
-		},
-		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
-		},
-		{
-			imgSrc: Blank,
-			altTag: "no video",
-			content: "",
+			imgSrc: HundredX,
+			altTag: "Easy 100x",
+			content: "Easy 100x",
 		},
 	];
+	const mkbhdVideos = [
+		{
+			imgSrc: <Tech22 />,
+			altTag: "2022 Tech",
+			content: "2022 Tech I'm Ready For",
+		},
+		{
+			imgSrc: <Bubbles />,
+			altTag: "Blue Bubbles vs Green Bubbles: Explained",
+			content: "Blue Bubbles vs Green Bubbles: Explained",
+		},
+		{
+			imgSrc: <OnePlus />,
+			altTag: "OnePlus 10 Pro Impressions: What Happened?",
+			content: "OnePlus 10 Pro Impressions: What Happened?",
+		},
+	];
+
+	useEffect(() => {
+		if (creatorName === "Marques Brownlee") {
+			setChannelVidoes(mkbhdVideos);
+		} else if (creatorName === "Alex Becker") {
+			setChannelVidoes(beckerVideos);
+		}
+	}, [creatorName]);
+
 	if (currentWallet === null) {
 		return (
 			<ChannelLayout creatorName={creatorName} avatarSrc={avatarSrc}>
@@ -152,7 +163,8 @@ const CreatorChannel = ({ selectedCreator, currentWallet, channelsList, selected
 			<ChannelLayout creatorName={creatorName} avatarSrc={avatarSrc}>
 				<Grid item xs={12} sx={{ marginTop: "24px" }}>
 					<Stake />
-					{/* <VideoCardsList videoData={channelVideos} /> */}
+					<br />
+					{hasUserStaked && <VideoCardsList videoData={channelVideos} />}
 				</Grid>
 			</ChannelLayout>
 		);
@@ -164,6 +176,7 @@ const mapStateToProps = (state) => ({
 	currentWallet: state.currentWallet,
 	channelsList: state.channelsList,
 	selectedPool: state.selectedPool,
+	hasUserStaked: state.hasUserStaked,
 });
 
 const mapDispatchToProps = {

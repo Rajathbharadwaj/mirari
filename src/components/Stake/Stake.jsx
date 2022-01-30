@@ -173,10 +173,10 @@ const Stake = ({
 			}
 			if (res.amount !== "0") {
 				setHasUserStaked(true);
-				setStakedBalance(res.amount / config.decimals);
 			} else {
 				setHasUserStaked(false);
 			}
+			setStakedBalance(res.amount / config.decimals);
 		});
 	}
 
@@ -212,11 +212,12 @@ const Stake = ({
 
 	// fetch latest lpBalance
 	useEffect(() => {
-		if (lpApproved && parseInt(lpBalance) >= 0 && assets && assets.length && assets.length > 0) {
+		if (lpApproved && assets && assets.length && assets.length > 0) {
 			const balance = assets.filter((item) => item.token_address === LPAddress)[0];
 			if (balance && balance.balance) {
 				setLpBalance(balance.balance / config.decimals);
 			}
+			fetchStakedBalanceFromMasterChef();
 		}
 	}, [assets, lpApproved, lpBalance]);
 
