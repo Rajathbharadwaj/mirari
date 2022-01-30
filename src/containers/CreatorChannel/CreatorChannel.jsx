@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
-import VideoCardsList from "containers/VideoCardsList/VideoCardsList";
+import VideoCardsList from "../../containers/VideoCardsList/VideoCardsList";
 import Account from "../../components/Account";
 import { setSelectedCreator } from "../../actions/AppActions";
 import Blank from "../../video-thumbnails/blank.png";
 import Stake from "../../components/Stake/Stake";
 import HundredX from "../../video-thumbnails/100x.png";
-import Tech22 from "../../video-thumbnails/2020tech.png";
+import Tech22 from "../../video-thumbnails/2022tech.png";
 import Bubbles from "../../video-thumbnails/bubbles.png";
 import Future from "../../video-thumbnails/future.png";
 import Gainz from "../../video-thumbnails/gainz.png";
@@ -66,7 +66,23 @@ const CreatorChannel = ({
 }) => {
 	const { creatorName, avatarSrc } = selectedCreator;
 	const { name } = selectedPool;
-	const [channelVideos, setChannelVidoes] = useState([]);
+	const [channelVideos, setChannelVidoes] = useState([
+		{
+			imgSrc: Blank,
+			altTag: "no video",
+			content: "",
+		},
+		{
+			imgSrc: Blank,
+			altTag: "",
+			content: "",
+		},
+		{
+			imgSrc: Blank,
+			altTag: "",
+			content: "",
+		},
+	]);
 	const beckerVideos = [
 		{
 			imgSrc: Gainz,
@@ -86,17 +102,17 @@ const CreatorChannel = ({
 	];
 	const mkbhdVideos = [
 		{
-			imgSrc: Tech22,
+			imgSrc: <Tech22 />,
 			altTag: "2022 Tech",
 			content: "2022 Tech I'm Ready For",
 		},
 		{
-			imgSrc: Bubbles,
+			imgSrc: <Bubbles />,
 			altTag: "Blue Bubbles vs Green Bubbles: Explained",
 			content: "Blue Bubbles vs Green Bubbles: Explained",
 		},
 		{
-			imgSrc: OnePlus,
+			imgSrc: <OnePlus />,
 			altTag: "OnePlus 10 Pro Impressions: What Happened?",
 			content: "OnePlus 10 Pro Impressions: What Happened?",
 		},
@@ -108,7 +124,7 @@ const CreatorChannel = ({
 		} else if (creatorName === "Alex Becker") {
 			setChannelVidoes(beckerVideos);
 		}
-	}, [beckerVideos, creatorName, mkbhdVideos]);
+	}, [creatorName]);
 
 	if (currentWallet === null) {
 		return (

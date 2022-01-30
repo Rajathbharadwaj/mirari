@@ -173,10 +173,10 @@ const Stake = ({
 			}
 			if (res.amount !== "0") {
 				setHasUserStaked(true);
-				setStakedBalance(res.amount / config.decimals);
 			} else {
 				setHasUserStaked(false);
 			}
+			setStakedBalance(res.amount / config.decimals);
 		});
 	}
 
