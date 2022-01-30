@@ -234,7 +234,7 @@ const Stake = ({
 									boxShadow: "inset 4px 4px 8px #ff0000, inset -6px -6px 12px #a0a0a0",
 								}}
 							>
-								{icon}
+								💰
 							</div>
 							<Typography marginBottom="16px" textAlign="center" variant="h5">
 								DAPPER Earned
