@@ -42,20 +42,25 @@ const Stake = ({
 	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
+
 	const closeModal = () => setStakingModalState({ open: false });
+
 	const getERC20Balances = async () => {
 		const balances = await fetchERC20Balance();
 		const balance = balances.filter((item) => item.token_address === LPAddress)[0];
-		if (balance) {
-			setLpBalance(balance / config.decimals);
+		if (balance && balance.balance) {
+			setLpBalance(balance.balance / config.decimals);
 		}
+		fetchStakedBalanceFromMasterChef();
 	};
+
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
 			return;
 		}
 		setOpenAlert(false);
 	};
+
 	const approveValue = web3.utils.toWei("100000000000000000");
 
 	//this is liqudity pool address, not jlp's address
@@ -84,6 +89,8 @@ const Stake = ({
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
+					closeModal();
+					getERC20Balances();
 				}
 			})
 			.on("transactionHash", (tx) => {
@@ -143,6 +150,8 @@ const Stake = ({
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
+					closeModal();
+					getERC20Balances();
 				}
 			})
 			.on("transactionHash", (tx) => {
@@ -205,8 +214,8 @@ const Stake = ({
 	useEffect(() => {
 		if (lpApproved && parseInt(lpBalance) >= 0 && assets && assets.length && assets.length > 0) {
 			const balance = assets.filter((item) => item.token_address === LPAddress)[0];
-			if (balance) {
-				setLpBalance(balance / config.decimals);
+			if (balance && balance.balance) {
+				setLpBalance(balance.balance / config.decimals);
 			}
 		}
 	}, [assets, lpApproved, lpBalance]);
@@ -222,7 +231,7 @@ const Stake = ({
 
 	// fetch latest staked balance
 	useEffect(() => {
-		if (lpApproved && hasUserStaked && parseInt(lpBalance) > 0 && parseInt(stakedBalance) >= 0) {
+		if (lpApproved) {
 			fetchStakedBalanceFromMasterChef();
 		}
 	}, [lpApproved, lpBalance, stakedBalance, hasUserStaked]);
@@ -282,7 +291,7 @@ const Stake = ({
 									textAlign="center"
 									sx={{ fontSize: "32px", color: "#e84042" }}
 								>
-									{reward} DAP
+									{reward && reward !== NaN ? Number(reward).toFixed(3) : reward} DAP
 								</Typography>
 								<Button
 									variant="contained"
