@@ -14,6 +14,7 @@ import MyChannel from "containers/MyChannel/MyChannel";
 import { setWalletAddress, setSelectedCreator } from "./actions/AppActions";
 import Logo from "./Logo.png";
 import CreatorChannel from "containers/CreatorChannel/CreatorChannel";
+import { useERC20Balance } from "./hooks/useERC20Balance";
 
 const useStyles = createUseStyles({
 	root: {
@@ -65,6 +66,7 @@ const useStyles = createUseStyles({
 const App = ({ setWalletAddress, creatorName, channelsList, setSelectedCreator }) => {
 	const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
 	const { walletAddress } = useMoralisDapp();
+	const { fetchERC20Balance, assets } = useERC20Balance({ chain: "avalanche testnet" });
 	const classes = useStyles();
 	const theme = useTheme();
 	const isXs = useMediaQuery(theme.breakpoints.only("xs"));
@@ -111,10 +113,16 @@ const App = ({ setWalletAddress, creatorName, channelsList, setSelectedCreator }
 		},
 	];
 
+	const getERC20Balances = async () => {
+		const balances = await fetchERC20Balance();
+		console.info("ERC20Balances", balances);
+	};
+
 	useEffect(() => {
 		if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
 			enableWeb3();
 			setWalletAddress(walletAddress);
+			getERC20Balances();
 		}
 		if (!isAuthenticated) {
 			setWalletAddress(null);
