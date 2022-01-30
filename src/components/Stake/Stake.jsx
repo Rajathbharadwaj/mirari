@@ -44,7 +44,11 @@ const Stake = ({
 	const [alertDetails, setAlertDetails] = useState("");
 	const closeModal = () => setStakingModalState({ open: false });
 	const getERC20Balances = async () => {
-		await fetchERC20Balance();
+		const balances = await fetchERC20Balance();
+		const balance = balances.filter((item) => item.token_address === LPAddress)[0];
+		if (balance) {
+			setLpBalance(balance / config.decimals);
+		}
 	};
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -89,7 +93,7 @@ const Stake = ({
 				setOpenAlert(true);
 				console.log("Hash of the transaction: " + tx);
 				closeModal();
-				getLpBalance();
+				getERC20Balances();
 			});
 	}
 
@@ -148,7 +152,7 @@ const Stake = ({
 				setOpenAlert(true);
 				console.log("Hash of the transaction: " + tx);
 				closeModal();
-				getLpBalance();
+				getERC20Balances();
 			});
 	}
 
@@ -199,7 +203,7 @@ const Stake = ({
 
 	// fetch latest lpBalance
 	useEffect(() => {
-		if (lpApproved && lpBalance === 0 && assets && assets.length && assets.length > 0) {
+		if (lpApproved && parseInt(lpBalance) >= 0 && assets && assets.length && assets.length > 0) {
 			const balance = assets.filter((item) => item.token_address === LPAddress)[0];
 			if (balance) {
 				setLpBalance(balance / config.decimals);
@@ -218,14 +222,14 @@ const Stake = ({
 
 	// fetch latest staked balance
 	useEffect(() => {
-		if (lpApproved && lpBalance > 0 && stakedBalance === 0) {
+		if (lpApproved && hasUserStaked && parseInt(lpBalance) > 0 && parseInt(stakedBalance) >= 0) {
 			fetchStakedBalanceFromMasterChef();
 		}
-	}, [lpApproved, lpBalance, stakedBalance]);
+	}, [lpApproved, lpBalance, stakedBalance, hasUserStaked]);
 
 	// fecth latest reward
 	useEffect(() => {
-		if (lpApproved && lpBalance > 0 && stakedBalance > 0) {
+		if (lpApproved && hasUserStaked) {
 			MasterContract.methods.pendingSushi(pid, currentWallet).call((err, res) => {
 				if (err) {
 					console.log("An error occured", err);
@@ -234,7 +238,7 @@ const Stake = ({
 				setReward(web3.utils.fromWei(res));
 			});
 		}
-	}, [lpApproved, lpBalance, stakedBalance]);
+	}, [lpApproved, hasUserStaked]);
 
 	return (
 		<Box sx={{ alignItems: "baseline", display: "flex", justifyContent: "center" }}>
