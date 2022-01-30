@@ -33,7 +33,7 @@ const StakingModal = ({ open, closeModal, title, value, setValue, symbol, onConf
 							},
 							endAdornment: (
 								<Button variant="text" sx={{ width: "100%" }} onClick={() => setValue(value)}>
-									Withdraw Max {symbol.replace("LP", "")}
+									Max {symbol.replace("LP", "")}
 								</Button>
 							),
 						}}
