@@ -42,20 +42,25 @@ const Stake = ({
 	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
+
 	const closeModal = () => setStakingModalState({ open: false });
+
 	const getERC20Balances = async () => {
 		const balances = await fetchERC20Balance();
 		const balance = balances.filter((item) => item.token_address === LPAddress)[0];
-		if (balance) {
-			setLpBalance(balance / config.decimals);
+		if (balance && balance.balance) {
+			setLpBalance(balance.balance / config.decimals);
 		}
+		fetchStakedBalanceFromMasterChef();
 	};
+
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
 			return;
 		}
 		setOpenAlert(false);
 	};
+
 	const approveValue = web3.utils.toWei("100000000000000000");
 
 	//this is liqudity pool address, not jlp's address
@@ -205,8 +210,8 @@ const Stake = ({
 	useEffect(() => {
 		if (lpApproved && parseInt(lpBalance) >= 0 && assets && assets.length && assets.length > 0) {
 			const balance = assets.filter((item) => item.token_address === LPAddress)[0];
-			if (balance) {
-				setLpBalance(balance / config.decimals);
+			if (balance && balance.balance) {
+				setLpBalance(balance.balance / config.decimals);
 			}
 		}
 	}, [assets, lpApproved, lpBalance]);
