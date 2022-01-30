@@ -1,4 +1,9 @@
-import { SET_SELECTED_CREATOR, SET_WALLET_ADDRESS } from "../actions/AppActions";
+import {
+	SET_SELECTED_CREATOR,
+	SET_STAKED_BALANCE,
+	SET_WALLET_ADDRESS,
+	SET_STAKING_MODAL_STATE,
+} from "../actions/AppActions";
 import supportedPools from "../contracts/supportedPools";
 import AvalancheOfficial from "../avatars/avalanche.jpeg";
 import Avalaunch from "../avatars/avalaunch.jpeg";
@@ -76,6 +81,16 @@ const initialState = {
 		tokenSymbol: "",
 		icon: "",
 	},
+	stakedBalance: 0,
+	stakingModalState: {
+		open: false,
+		closeModal: () => {},
+		title: "",
+		value: 0,
+		setValue: () => {},
+		symbol: "",
+		onConfirm: () => {},
+	},
 };
 
 const setSelectedPool = (payload, state) => {
@@ -100,6 +115,19 @@ const appReducer = (state = initialState, action) => {
 			return {
 				...state,
 				currentWallet: payload,
+			};
+		case SET_STAKED_BALANCE:
+			return {
+				...state,
+				stakedBalance: payload,
+			};
+		case SET_STAKING_MODAL_STATE:
+			return {
+				...state,
+				stakingModalState: {
+					...state.stakingModalState,
+					...payload,
+				},
 			};
 		default:
 			return state;
