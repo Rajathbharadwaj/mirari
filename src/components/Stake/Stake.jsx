@@ -89,6 +89,8 @@ const Stake = ({
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
+					closeModal();
+					getERC20Balances();
 				}
 			})
 			.on("transactionHash", (tx) => {
@@ -148,6 +150,8 @@ const Stake = ({
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
 					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
+					closeModal();
+					getERC20Balances();
 				}
 			})
 			.on("transactionHash", (tx) => {
@@ -227,7 +231,7 @@ const Stake = ({
 
 	// fetch latest staked balance
 	useEffect(() => {
-		if (lpApproved && hasUserStaked && parseInt(lpBalance) > 0 && parseInt(stakedBalance) >= 0) {
+		if (lpApproved) {
 			fetchStakedBalanceFromMasterChef();
 		}
 	}, [lpApproved, lpBalance, stakedBalance, hasUserStaked]);
@@ -287,7 +291,7 @@ const Stake = ({
 									textAlign="center"
 									sx={{ fontSize: "32px", color: "#e84042" }}
 								>
-									{reward} DAP
+									{reward && reward !== NaN ? Number(reward).toFixed(3) : reward} DAP
 								</Typography>
 								<Button
 									variant="contained"
