@@ -1,47 +1,49 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { connect } from "react-redux";
-import {
-	Button,
-	Snackbar,
-	Alert,
-	Typography,
-	Card,
-	CardContent,
-	Box,
-	TextField,
-} from "@mui/material";
+import { Button, Snackbar, Alert, Typography, Card, CardContent, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import LPInfo from "../../contracts/abis/fuji/JLP.json";
 import MasterInfo from "../../contracts/abis/fuji/MasterChef.json";
 import Web3 from "web3";
 import config from "../../contracts/config";
-import { setStakedBalance, setStakingModalState } from "../../actions/AppActions";
-import useInterval from "../../hooks/useInterval";
+import {
+	setStakedBalance,
+	setStakingModalState,
+	setLpBalance,
+	setLpApproved,
+	setReward,
+} from "../../actions/AppActions";
 import StakingModal from "components/StakingModal/StakingModal";
+import { useERC20Balance } from "../../hooks/useERC20Balance";
 
 const Stake = ({
 	currentWallet,
 	selectedPool,
-	balance,
+	lpBalance,
+	stakedBalance,
+	reward,
+	lpApproved,
 	setStakedBalance,
-	stakingModalState,
 	setStakingModalState,
+	stakingModalState,
+	setLpBalance,
+	setLpApproved,
+	setReward,
 }) => {
+	const { fetchERC20Balance, assets } = useERC20Balance({ chain: "avalanche testnet" });
 	const web3 = new Web3(window.web3.currentProvider);
 	const backgroundColor = "#000000";
 	const color = "#ffffff";
 	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses, pid } = selectedPool;
-	const [dval, setDval] = useState(0);
 	const [open, setOpen] = useState(false);
-	const [isApproved, setIsApproved] = useState(false);
 	const [hasUserStaked, setHasUserStaked] = useState(false);
-	const [participate, setParticipate] = useState(false);
-	const [wval, setWval] = useState(0);
-	const [reward, setReward] = useState(0);
 	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
 	const closeModal = () => setStakingModalState({ open: false });
+	const getERC20Balances = async () => {
+		await fetchERC20Balance();
+	};
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
 			return;
@@ -84,8 +86,7 @@ const Stake = ({
 				setAlertDetails(`📃 Tx Hash: ${tx}`);
 				setOpen(true);
 				console.log("Hash of the transaction: " + tx);
-				setHasUserStaked(true);
-				if (value === 0) {
+				if (value === "0") {
 					closeModal();
 				}
 			});
@@ -116,7 +117,7 @@ const Stake = ({
 				setAlertDetails(`📃 Tx Hash: ${tx}`);
 				setOpen(true);
 				console.log("Hash of the transaction: " + tx);
-				setIsApproved(true);
+				setLpApproved(true);
 			});
 	}
 
@@ -145,11 +146,11 @@ const Stake = ({
 				console.log("An error occured", err);
 				return;
 			}
-			if (res.amount !== 0 && hasUserStaked) {
-				setParticipate(true);
+			if (res.amount !== "0") {
+				setHasUserStaked(true);
 				setStakedBalance(res.amount / config.decimals);
 			} else {
-				setParticipate(false);
+				setHasUserStaked(false);
 			}
 		});
 	}
@@ -161,33 +162,58 @@ const Stake = ({
 				return;
 			}
 			if (res === approveValue) {
-				setIsApproved(true);
+				setLpApproved(true);
 			} else {
-				setIsApproved(false);
+				setLpApproved(false);
 			}
 		});
-
-		if (!hasUserStaked) {
-			LPContract.methods.balanceOf(currentWallet).call(function (err, res) {
-				if (err) {
-					console.log("An error occured", err);
-					return;
-				}
-				const bal = res / config.decimals;
-				setStakedBalance(bal);
-				if (bal > 0) {
-					setHasUserStaked(true);
-				}
-			});
-		}
 	}
 
-	useInterval(() => checkApproval(), 1500);
+	function getLpBalance() {
+		LPContract.methods.balanceOf(currentWallet).call(function (err, res) {
+			if (err) {
+				console.log("An error occured", err);
+				return;
+			}
+			const bal = res / config.decimals;
+			setLpBalance(bal);
+		});
+	}
 
-	useInterval(() => fetchStakedBalanceFromMasterChef(), 1500);
+	// fetch balances once
+	useEffect(() => {
+		getERC20Balances();
+	}, []);
 
-	useInterval(function () {
-		if (hasUserStaked) {
+	// fetch latest lpBalance
+	useEffect(() => {
+		if (lpApproved && lpBalance === "0" && assets && assets.length && assets.length > 0) {
+			const balance = assets.filter((item) => item.token_address === LPAddress)[0];
+			if (balance) {
+				setLpBalance(balance / config.decimals);
+			}
+		}
+	}, [assets, lpApproved, lpBalance]);
+
+	// fetch lpBalance on approval
+	useEffect(() => {
+		if (!lpApproved) {
+			checkApproval();
+		} else if (lpApproved) {
+			getLpBalance();
+		}
+	}, [lpApproved]);
+
+	// fetch latest staked balance
+	useEffect(() => {
+		if (lpApproved && lpBalance > "0" && stakedBalance === "0") {
+			fetchStakedBalanceFromMasterChef();
+		}
+	}, [lpApproved, lpBalance, stakedBalance]);
+
+	// fecth latest reward
+	useEffect(() => {
+		if (lpApproved && lpBalance > "0" && stakedBalance > "0") {
 			MasterContract.methods.pendingSushi(pid, currentWallet).call((err, res) => {
 				if (err) {
 					console.log("An error occured", err);
@@ -196,23 +222,18 @@ const Stake = ({
 				setReward(web3.utils.fromWei(res));
 			});
 		}
-	}, 8000);
-
-	useEffect(() => {
-		if (hasUserStaked) {
-			fetchStakedBalanceFromMasterChef();
-		}
-	}, [hasUserStaked]);
+	}, [lpApproved, lpBalance, stakedBalance]);
 
 	return (
 		<Box sx={{ alignItems: "baseline", display: "flex", justifyContent: "center" }}>
-			{hasUserStaked && (
+			{lpApproved && hasUserStaked && (
 				<Card
 					sx={{
 						width: "32%",
 						marginTop: "32px",
 						marginRight: "32px",
 						height: "100%",
+						minHeight: "300px",
 						borderRadius: "16px",
 						color: color,
 						backgroundColor: backgroundColor,
@@ -234,7 +255,7 @@ const Stake = ({
 									boxShadow: "inset 4px 4px 8px #ff0000, inset -6px -6px 12px #a0a0a0",
 								}}
 							>
-								{icon}
+								💰
 							</div>
 							<Typography marginBottom="16px" textAlign="center" variant="h5">
 								DAPPER Earned
@@ -257,10 +278,9 @@ const Stake = ({
 											symbol,
 											closeModal,
 											title: "Harvest Dapper Earnings",
-											value: wval,
-											setValue: setWval,
+											maxValue: Number(reward),
 											onConfirm: () => {
-												Deposit(0);
+												Deposit("0");
 											},
 										});
 									}}
@@ -277,6 +297,7 @@ const Stake = ({
 					width: "32%",
 					marginTop: "32px",
 					height: "100%",
+					minHeight: "300px",
 					borderRadius: "16px",
 					color: color,
 					backgroundColor: backgroundColor,
@@ -311,7 +332,7 @@ const Stake = ({
 							</Typography>
 						)}
 						<div style={{ display: "flex", flexDirection: "column" }}>
-							{!isApproved && (
+							{!lpApproved && (
 								<Button
 									variant="contained"
 									sx={{ backgroundColor: "#e84042" }}
@@ -320,7 +341,7 @@ const Stake = ({
 									Approve {symbol}
 								</Button>
 							)}
-							{isApproved && !hasUserStaked && (
+							{lpApproved && !hasUserStaked && (
 								<>
 									<Button
 										variant="contained"
@@ -332,10 +353,9 @@ const Stake = ({
 												symbol,
 												closeModal,
 												title: `Deposit ${symbol}`,
-												value: dval,
-												setValue: setDval,
-												onConfirm: () => {
-													Deposit(dval);
+												maxValue: Number(lpBalance),
+												onConfirm: (value) => {
+													Deposit(value);
 												},
 											});
 										}}
@@ -343,19 +363,19 @@ const Stake = ({
 										Deposit {symbol}
 									</Button>
 									<div style={{ marginTop: "16px" }}>
-										Balance In Your Wallet : {balance} {symbol}
+										Balance In Your Wallet : {lpBalance} {symbol}
 									</div>
 								</>
 							)}
 						</div>
-						{isApproved && participate && (
+						{lpApproved && hasUserStaked && (
 							<div style={{ display: "flex", flexDirection: "column" }}>
 								<Typography
 									variant="h5"
 									textAlign="center"
 									sx={{ fontSize: "32px", color: "#e84042" }}
 								>
-									{balance} {symbol} Staked
+									{stakedBalance} {symbol} Staked
 								</Typography>
 								<Box
 									sx={{
@@ -367,18 +387,17 @@ const Stake = ({
 								>
 									<Button
 										variant="contained"
-										sx={{ backgroundColor: "#e84042", width: "200px" }}
+										sx={{ backgroundColor: "#e84042", width: "160px" }}
 										onClick={() => {
 											setStakingModalState({
 												...stakingModalState,
 												open: true,
 												symbol,
 												closeModal,
-												title: "Harvest Dapper Earnings",
-												value: wval,
-												setValue: setWval,
-												onConfirm: () => {
-													withdrawFunds(wval);
+												title: `Withdraw ${symbol}`,
+												maxValue: Number(stakedBalance),
+												onConfirm: (value) => {
+													withdrawFunds(value);
 												},
 											});
 										}}
@@ -387,7 +406,7 @@ const Stake = ({
 									</Button>
 									<Button
 										variant="contained"
-										sx={{ backgroundColor: "#e84042", width: "200px" }}
+										sx={{ backgroundColor: "#e84042", width: "160px" }}
 										onClick={() => {
 											setStakingModalState({
 												...stakingModalState,
@@ -395,10 +414,9 @@ const Stake = ({
 												symbol,
 												closeModal,
 												title: `Deposit ${symbol}`,
-												value: dval,
-												setValue: setDval,
-												onConfirm: () => {
-													Deposit(dval);
+
+												onConfirm: (value) => {
+													Deposit(value);
 												},
 											});
 										}}
@@ -432,13 +450,19 @@ const Stake = ({
 const mapStateToProps = (state) => ({
 	currentWallet: state.currentWallet,
 	selectedPool: state.selectedPool,
-	balance: state.stakedBalance,
+	lpBalance: state.lpBalance,
+	stakedBalance: state.stakedBalance,
+	reward: state.reward,
+	lpApproved: state.lpApproved,
 	stakingModalState: state.stakingModalState,
 });
 
 const mapDispatchToProps = {
-	setStakedBalance: setStakedBalance,
-	setStakingModalState: setStakingModalState,
+	setStakedBalance,
+	setStakingModalState,
+	setLpBalance,
+	setLpApproved,
+	setReward,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stake);
