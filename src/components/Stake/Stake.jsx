@@ -374,7 +374,7 @@ const Stake = ({
 												open: true,
 												symbol,
 												closeModal,
-												title: "Harvest Dapper Earnings",
+												title: `Withdraw ${symbol}`,
 												value: wval,
 												setValue: setWval,
 												onConfirm: () => {
