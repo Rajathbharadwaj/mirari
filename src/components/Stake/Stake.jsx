@@ -12,6 +12,7 @@ import {
 	setLpBalance,
 	setLpApproved,
 	setReward,
+	setHasUserStaked,
 } from "../../actions/AppActions";
 import StakingModal from "components/StakingModal/StakingModal";
 import { useERC20Balance } from "../../hooks/useERC20Balance";
@@ -21,9 +22,11 @@ const Stake = ({
 	selectedPool,
 	lpBalance,
 	stakedBalance,
+	hasUserStaked,
 	reward,
 	lpApproved,
 	setStakedBalance,
+	setHasUserStaked,
 	setStakingModalState,
 	stakingModalState,
 	setLpBalance,
@@ -35,8 +38,7 @@ const Stake = ({
 	const backgroundColor = "#000000";
 	const color = "#ffffff";
 	const { icon, name, symbol, tokenSymbol, lpAddresses, tokenAddresses, pid } = selectedPool;
-	const [open, setOpen] = useState(false);
-	const [hasUserStaked, setHasUserStaked] = useState(false);
+	const [openAlert, setOpenAlert] = useState(false);
 	const [alertType, setAlertType] = useState("info");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [alertDetails, setAlertDetails] = useState("");
@@ -48,7 +50,7 @@ const Stake = ({
 		if (reason === "clickaway") {
 			return;
 		}
-		setOpen(false);
+		setOpenAlert(false);
 	};
 	const approveValue = web3.utils.toWei("100000000000000000");
 
@@ -70,13 +72,13 @@ const Stake = ({
 					setAlertType("error");
 					setAlertMessage("Deposit Transaction failed!");
 					setAlertDetails(`📃 Tx Hash: ${err.message}`);
-					setOpen(true);
+					setOpenAlert(true);
 					console.log("An error occured", err);
 				} else {
 					setAlertType("success");
 					setAlertMessage("🔊 New Transaction");
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
-					setOpen(true);
+					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
 				}
 			})
@@ -84,7 +86,7 @@ const Stake = ({
 				setAlertType("success");
 				setAlertMessage("🔊 Deposit Successful");
 				setAlertDetails(`📃 Tx Hash: ${tx}`);
-				setOpen(true);
+				setOpenAlert(true);
 				console.log("Hash of the transaction: " + tx);
 				closeModal();
 				getLpBalance();
@@ -100,13 +102,13 @@ const Stake = ({
 					setAlertType("error");
 					setAlertMessage("Approval failed!");
 					setAlertDetails(`📃 Tx Hash: ${err.message}`);
-					setOpen(true);
+					setOpenAlert(true);
 					console.log("An error occured", err);
 				} else {
 					setAlertType("info");
 					setAlertMessage("🔊 New Transaction");
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
-					setOpen(true);
+					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
 				}
 			})
@@ -114,7 +116,7 @@ const Stake = ({
 				setAlertType("success");
 				setAlertMessage("🔊 Approved");
 				setAlertDetails(`📃 Tx Hash: ${tx}`);
-				setOpen(true);
+				setOpenAlert(true);
 				console.log("Hash of the transaction: " + tx);
 				setLpApproved(true);
 			});
@@ -129,13 +131,13 @@ const Stake = ({
 					setAlertType("error");
 					setAlertMessage("Approval failed!");
 					setAlertDetails(`📃 Tx Hash: ${err.message}`);
-					setOpen(true);
+					setOpenAlert(true);
 					console.log("An error occured", err);
 				} else {
 					setAlertType("success");
 					setAlertMessage("🔊 New Transaction");
 					setAlertDetails(`📃 Tx Hash: ${res.toString()}`);
-					setOpen(true);
+					setOpenAlert(true);
 					console.log("Hash of the transaction: " + res);
 				}
 			})
@@ -143,7 +145,7 @@ const Stake = ({
 				setAlertType("success");
 				setAlertMessage("🔊 Withdraw Successful");
 				setAlertDetails(`📃 Tx Hash: ${tx}`);
-				setOpen(true);
+				setOpenAlert(true);
 				console.log("Hash of the transaction: " + tx);
 				closeModal();
 				getLpBalance();
@@ -444,7 +446,7 @@ const Stake = ({
 
 			<Snackbar
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
-				open={open}
+				open={openAlert}
 				autoHideDuration={6000}
 				onClose={handleClose}
 			>
@@ -465,6 +467,7 @@ const mapStateToProps = (state) => ({
 	reward: state.reward,
 	lpApproved: state.lpApproved,
 	stakingModalState: state.stakingModalState,
+	hasUserStaked: state.hasUserStaked,
 });
 
 const mapDispatchToProps = {
@@ -473,6 +476,7 @@ const mapDispatchToProps = {
 	setLpBalance,
 	setLpApproved,
 	setReward,
+	setHasUserStaked,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stake);

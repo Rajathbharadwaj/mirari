@@ -5,6 +5,7 @@ export const SET_REWARD = "SET_REWARD";
 export const SET_STAKED_BALANCE = "SET_STAKED_BALANCE";
 export const SET_STAKING_MODAL_STATE = "SET_STAKING_MODAL_STATE";
 export const SET_LP_APPROVED = "SET_LP_APPROVED";
+export const SET_HAS_USER_STAKED = "SET_HAS_USER_STAKED";
 
 export const setSelectedCreator = (data) => {
 	return {
@@ -51,6 +52,13 @@ export const setStakingModalState = (data) => {
 export const setLpApproved = (data) => {
 	return {
 		type: SET_LP_APPROVED,
+		payload: data,
+	};
+};
+
+export const setHasUserStaked = (data) => {
+	return {
+		type: SET_HAS_USER_STAKED,
 		payload: data,
 	};
 };
