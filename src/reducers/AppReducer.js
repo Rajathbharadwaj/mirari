@@ -6,6 +6,7 @@ import {
 	SET_LP_BALANCE,
 	SET_REWARD,
 	SET_LP_APPROVED,
+	SET_HAS_USER_STAKED,
 } from "../actions/AppActions";
 import supportedPools from "../contracts/supportedPools";
 import AvalancheOfficial from "../avatars/avalanche.jpeg";
@@ -88,6 +89,7 @@ const initialState = {
 	stakedBalance: 0,
 	reward: 0,
 	lpApproved: false,
+	hasUserStaked: false,
 	stakingModalState: {
 		open: false,
 		closeModal: () => {},
@@ -119,6 +121,7 @@ const appReducer = (state = initialState, action) => {
 				reward: 0,
 				stakedBalance: 0,
 				lpApproved: false,
+				hasUserStaked: false,
 				stakingModalState: { ...initialState.stakingModalState },
 			};
 		case SET_WALLET_ADDRESS:
@@ -145,6 +148,11 @@ const appReducer = (state = initialState, action) => {
 			return {
 				...state,
 				lpApproved: payload,
+			};
+		case SET_HAS_USER_STAKED:
+			return {
+				...state,
+				hasUserStaked: payload,
 			};
 		case SET_STAKING_MODAL_STATE:
 			return {
