@@ -86,8 +86,8 @@ const CreatorChannel = ({
 	const beckerVideos = [
 		{
 			imgSrc: Gainz,
-			altTag: "These 5 NEW NFTs Will 50x Next Week (HUGE DROP LIST)",
-			content: "These 5 NEW NFTs Will 50x Next Week (HUGE DROP LIST)",
+			altTag: "These 5 NEW NFTs Will 50x Next Week",
+			content: "These 5 NEW NFTs Will 50x Next Week",
 		},
 		{
 			imgSrc: Future,

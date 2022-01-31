@@ -75,7 +75,7 @@ const VideoCardsList = (props) => {
 				marginLeft: "0!important",
 			}}
 			justifyContent="flex-start"
-			alignItems="baseline"
+			alignItems="flex-start"
 			columns={{ xs: 4, sm: 8, md: 12 }}
 		>
 			{videos.map((video, index) => (

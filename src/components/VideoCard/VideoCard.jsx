@@ -7,6 +7,7 @@ const VideoCard = (props) => {
 		<Card
 			sx={{
 				maxWidth: 345,
+				height: "260px",
 				":hover": {
 					cursor: "pointer",
 					boxShadow: "0 10px 10px #c4c4c4",
