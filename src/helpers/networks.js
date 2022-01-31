@@ -11,11 +11,11 @@ export const networkConfigs = {
     rpcUrl: "http://127.0.0.1:7545",
   },
   "0xa86a": {
-    chainId: 43114,
-    chainName: "Avalanche Mainnet",
+    chainId: 43113,
+    chainName: "Avalanche Fuji",
     currencyName: "AVAX",
     currencySymbol: "AVAX",
-    rpcUrl: "https://api.avax.network/ext/bc/C/rpc",
+    rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
     blockExplorerUrl: "https://cchain.explorer.avax.network/",
   },
   "0x38": {
